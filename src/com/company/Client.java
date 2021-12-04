@@ -27,51 +27,14 @@ public class Client {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        /**
-         * TODO: Figure out port and hostname stuff...is it automatic/should there be multiple ports...
-         */
         boolean run = true; //boolean for whether the client should be running
-        int port = 0; //default port
-        String hostName = ""; //default host name
 
         try {
             //WELCOMES THE USER
             JOptionPane.showMessageDialog(null, "WELCOME", "Quiz System",
                     JOptionPane.PLAIN_MESSAGE);
-
-            //PROMPTS FOR HOSTNAME
-            boolean hostnameRun = true;
-            do {
-                hostName = JOptionPane.showInputDialog(null, "Enter Hostname", "Quiz System",
-                        JOptionPane.QUESTION_MESSAGE);
-                if (hostName.equals("")) {
-                    makeError("Please enter a hostname");
-                } else {
-                    hostnameRun = false;
-                }
-            } while (hostnameRun);
         } catch (Exception e) {
             run = false;
-        }
-
-        //PROMPTS USER FOR PORT
-        if (run == true) {
-            boolean portRun = true;
-            do {
-                String portString = JOptionPane.showInputDialog(null, "Enter a Port", "Quiz System",
-                        JOptionPane.QUESTION_MESSAGE);
-                if (portString == null || portString.equals(JOptionPane.CANCEL_OPTION) || portString.equals(JOptionPane.CANCEL_OPTION)) {
-                    run = false;
-                    portRun = false;
-                } else {
-                    try {
-                        port = Integer.parseInt(portString);
-                        portRun = false;
-                    } catch (Exception e) {
-                        makeError("Please enter a port that's a number");
-                    }
-                }
-            } while (portRun);
         }
 
         //ATTEMPTS TO CONNECT TO SERVER
@@ -79,19 +42,21 @@ public class Client {
         PrintWriter writer = null;
         if (run == true) {
             try {
-                Socket socket = new Socket(hostName, port);
+
+                /**
+                 * TODO: pretty sure that the hostname and port are going to have the be different, look it up on campuswire and online
+                 */
+                Socket socket = new Socket("localhost", 4242);
 
                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 writer = new PrintWriter(socket.getOutputStream());
 
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Couldn't connect, goodbye!!!", "Quiz System",
-                        JOptionPane.ERROR_MESSAGE);
                 run = false;
             }
         }
+        //DISPLAYS CONNECTION MESSAGE
         if (run == true) {
-            //DISPLAYS CONNECTION MESSAGE
             try {
                 JOptionPane.showMessageDialog(null, "Client Connected!!!", "Quiz System",
                         JOptionPane.PLAIN_MESSAGE);
@@ -99,40 +64,16 @@ public class Client {
                 run = false;
             }
         }
-        //PROMPTS USER FOR STRING
+        //Runs main application
         if (run == true) {
-            boolean stringRun = true;
-            do {
-                String stringToServer = JOptionPane.showInputDialog(null, "Type to send something to server", "Quiz System",
-                        JOptionPane.QUESTION_MESSAGE);
-                if (stringToServer == null || stringToServer.equals(JOptionPane.CANCEL_OPTION) || stringToServer.equals(JOptionPane.CANCEL_OPTION)) {
-                    run = false;
-                    stringRun = false;
-                } else {
-                    try {
-                        if (stringToServer.equals("")) {
-                            throw new Exception();
-                        }
-                        writer.write(stringToServer);
-                        writer.println();
-                        writer.flush();
-                        stringRun = false;
-                    } catch (Exception e) {
-                        makeError("Please enter a string");
-                    }
-                }
-            } while (stringRun);
-        }
-
-        //PRINTS WHAT THE SERVER SENT BACK
-        if (run == true) {
-            try {
-                String s1 = reader.readLine();
-                JOptionPane.showMessageDialog(null, s1, "Quiz System",
-                        JOptionPane.PLAIN_MESSAGE);
-            } catch (Exception e) {
-                run = false;
-            }
+            //All methods that need to be run will be called within here
+            TeacherGUI.runTeacherGUI();
+            //----------------------------------------------------------
+            /**TODO
+             * Issue with this. Basically it runs this right after the call above without waiting for it to finish
+             * Not sure how to fully fix it, my guess is that it's something to do with concurrency.
+             * */
+            run = false;
         }
 
         //HANDLES ANY CONNECTION ERRORS AND CLOSES THE CLIENT
