@@ -71,7 +71,11 @@ public class Client {
             /**
              * TODO: DO YOUR THINGY HERE THAT MAKES THE PROGRAM MOVE ON FROM THIS LINE WHEN THIS METHOD IS DONE RUNNING
              * */
-            TeacherGUI.runTeacherGUI();
+            i = TeacherGUI.runTeacherGUI();
+            
+            if (i == 1) {
+                run = false;
+            }
         }
 
         //PRINTS WHAT THE SERVER SENT BACK - only used for testing
