@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowStateListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class TeacherGUI extends Thread implements Runnable {

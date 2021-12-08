@@ -38,8 +38,8 @@ public class Server {
                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 writer = new PrintWriter(socket.getOutputStream());
 
+                //Default server functions for now
                 String message = reader.readLine();
-
                 String response = "Server was given: " + message;
 
                 writer.write(response);

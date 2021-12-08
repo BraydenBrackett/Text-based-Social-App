@@ -20,6 +20,8 @@ public class Client {
                 JOptionPane.ERROR_MESSAGE);
     }
 
+    public static Socket socket;
+
     /**
      * Main method the client runs from.
      *
@@ -27,10 +29,14 @@ public class Client {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
+        /**
+         * TODO: Figure out port and hostname stuff...is it automatic/should there be multiple ports...
+         */
+
         boolean run = true; //boolean for whether the client should be running
 
+        //WELCOMES THE USER
         try {
-            //WELCOMES THE USER
             JOptionPane.showMessageDialog(null, "WELCOME", "Quiz System",
                     JOptionPane.PLAIN_MESSAGE);
         } catch (Exception e) {
@@ -42,11 +48,7 @@ public class Client {
         PrintWriter writer = null;
         if (run == true) {
             try {
-
-                /**
-                 * TODO: pretty sure that the hostname and port are going to have the be different, look it up on campuswire and online
-                 */
-                Socket socket = new Socket("localhost", 4242);
+                socket = new Socket("localhost", 4242);
 
                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 writer = new PrintWriter(socket.getOutputStream());
@@ -55,8 +57,8 @@ public class Client {
                 run = false;
             }
         }
-        //DISPLAYS CONNECTION MESSAGE
         if (run == true) {
+            //DISPLAYS CONNECTION MESSAGE
             try {
                 JOptionPane.showMessageDialog(null, "Client Connected!!!", "Quiz System",
                         JOptionPane.PLAIN_MESSAGE);
@@ -64,17 +66,24 @@ public class Client {
                 run = false;
             }
         }
-        //Runs main application
+        //PROMPTS USER FOR STRING
         if (run == true) {
-            //All methods that need to be run will be called within here
-            TeacherGUI.runTeacherGUI();
-            //----------------------------------------------------------
-            /**TODO
-             * Issue with this. Basically it runs this right after the call above without waiting for it to finish
-             * Not sure how to fully fix it, my guess is that it's something to do with concurrency.
+            /**
+             * TODO: DO YOUR THINGY HERE THAT MAKES THE PROGRAM MOVE ON FROM THIS LINE WHEN THIS METHOD IS DONE RUNNING
              * */
-            run = false;
+            TeacherGUI.runTeacherGUI();
         }
+
+        //PRINTS WHAT THE SERVER SENT BACK - only used for testing
+        /*if (run == true) {
+            try {
+                String s1 = reader.readLine();
+                JOptionPane.showMessageDialog(null, s1, "Quiz System",
+                        JOptionPane.PLAIN_MESSAGE);
+            } catch (Exception e) {
+                run = false;
+            }
+        }*/
 
         //HANDLES ANY CONNECTION ERRORS AND CLOSES THE CLIENT
         if (run == false) {
@@ -88,5 +97,18 @@ public class Client {
                         JOptionPane.PLAIN_MESSAGE);
             }
         }
+    }
+
+    /**
+     * Method called in other classes to send things to server
+     *
+     * @param input String to be sent to server
+     * @throws IOException
+     */
+    public static void sendToServer(String input) throws IOException {
+        PrintWriter writer = new PrintWriter(socket.getOutputStream());
+        writer.write(input);
+        writer.println();
+        writer.flush();
     }
 }
