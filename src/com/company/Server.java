@@ -39,7 +39,7 @@ public class Server {
                 writer = new PrintWriter(socket.getOutputStream());
 
                 //Default server functions for now
-                String message = reader.readLine();
+                String message = reader.readLine() + reader.readLine();
                 String response = "Server was given: " + message;
 
                 writer.write(response);

@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 
 public class TeacherGUI extends Thread implements Runnable {
     //Return value variable
-    private static int returnValue = 0;
+    //private static int returnValue = 0;
     
     //All buttons and frames for teacher options
     JFrame frame;
@@ -170,7 +170,7 @@ public class TeacherGUI extends Thread implements Runnable {
                 modifyFrame.dispose();
                 gradeFrame.dispose();
                 deleteFrame.dispose();
-                returnValue = 1;
+                //returnValue = 1;
             }
             if (e.getSource() == returnButton) {
                 frame.setVisible(true);
@@ -545,10 +545,11 @@ public class TeacherGUI extends Thread implements Runnable {
     //this will replace the current runTeacher call in the main method for the client
     public static void runTeacherGUI() {
         SwingUtilities.invokeLater(new TeacherGUI());
-        
-        while (returnValue == 0) {
+        //need to invoke runnable here
+
+        /*while (returnValue == 0) {
             System.out.print("");
-        }
-        return returnValue;
+        }*/
+        //return returnValue;
     }
 }

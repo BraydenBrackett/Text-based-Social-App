@@ -71,15 +71,16 @@ public class Client {
             /**
              * TODO: DO YOUR THINGY HERE THAT MAKES THE PROGRAM MOVE ON FROM THIS LINE WHEN THIS METHOD IS DONE RUNNING
              * */
-            i = TeacherGUI.runTeacherGUI();
-            
-            if (i == 1) {
+            //int i;
+            TeacherGUI.runTeacherGUI();
+            /*if (i == 1) {
                 run = false;
-            }
+            }*/
         }
 
+
         //PRINTS WHAT THE SERVER SENT BACK - only used for testing
-        /*if (run == true) {
+        if (run == true) {
             try {
                 String s1 = reader.readLine();
                 JOptionPane.showMessageDialog(null, s1, "Quiz System",
@@ -87,7 +88,8 @@ public class Client {
             } catch (Exception e) {
                 run = false;
             }
-        }*/
+        }
+
 
         //HANDLES ANY CONNECTION ERRORS AND CLOSES THE CLIENT
         if (run == false) {
@@ -106,13 +108,17 @@ public class Client {
     /**
      * Method called in other classes to send things to server
      *
-     * @param input String to be sent to server
+     * @param line1 String to be sent to server
      * @throws IOException
      */
-    public static void sendToServer(String input) throws IOException {
+    public static void sendToServer(String line1, String line2) throws IOException {
         PrintWriter writer = new PrintWriter(socket.getOutputStream());
-        writer.write(input);
+        writer.write(line1);
+        writer.println();
+        writer.write(line2);
         writer.println();
         writer.flush();
     }
+
+
 }

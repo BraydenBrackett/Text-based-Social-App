@@ -175,12 +175,12 @@ public class Login extends JComponent implements Runnable{
         username = new JTextField(10);
         panelUN.add(username);
         contentLogin.add(panelUN, BorderLayout.WEST);
-        
+
         unLabel1 = new JLabel("Enter Username:");
         unLabel1.setFont(new Font("Calibri", Font.PLAIN, 12));
         panelUN1.add(unLabel1);
         contentRegister.add(panelUN1, BorderLayout.CENTER);
-        
+
         username1 = new JTextField(10);
         panelUN1.add(username1);
         contentRegister.add(panelUN1, BorderLayout.CENTER);
@@ -194,8 +194,8 @@ public class Login extends JComponent implements Runnable{
         pwLabel1.setFont(new Font("Calibri", Font.PLAIN, 12));
         panelUN1.add(pwLabel1);
         contentRegister.add(panelUN1, BorderLayout.CENTER);
-        
-        
+
+
 
         password = new JTextField(10);
         panelUN.add(password);
@@ -304,7 +304,7 @@ public class Login extends JComponent implements Runnable{
             }
         });
     }
-    
+
     public void loginFrame() {
         frameLogin.setVisible(true);
         frameRegister.setVisible(false);
