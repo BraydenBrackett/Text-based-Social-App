@@ -24,13 +24,9 @@ public class StudentGUI extends JComponent implements Runnable{
     static JTextField password1; // text field for password
     static JButton submit2; // button to submit credentials
 
-    static JButton registerHere; // button to submit credentials
-    static JButton loginHere; // button to submit credentials
+    static JButton registerHere; // button to switch to register frame
+    static JButton loginHere; // button to switch to log-in frame
 
-    static  int curX; // current mouse x coordinate
-    static int curY; // current mouse y coordinate
-    static int oldX; // previous mouse x coordinate
-    static int oldY; // previous mouse y coordinate
     static Student student;
 
     static StudentGUI studentGUI; // variable of the type Paint
