@@ -4,11 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowStateListener;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 public class TeacherGUI extends Thread implements Runnable {
     //Return value variable
@@ -92,6 +88,9 @@ public class TeacherGUI extends Thread implements Runnable {
         public void actionPerformed(ActionEvent e) {
             //read quiz
             if (e.getSource() == readQuizButton) {
+                //EXAMPLE OF HOW TO WRITE TO THE SERVER
+                //Client.sendStuffToTheServer("ServerFile.txt","sent from readQuizButton");
+
                 frame.setVisible(false);
                 readFrame.setVisible(true);
             }

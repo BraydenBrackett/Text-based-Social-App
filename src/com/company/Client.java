@@ -1,10 +1,7 @@
 package com.company;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -21,6 +18,7 @@ public class Client {
     }
 
     public static Socket socket;
+    public static BufferedReader reader = null;
 
     /**
      * Main method the client runs from.
@@ -44,7 +42,6 @@ public class Client {
         }
 
         //ATTEMPTS TO CONNECT TO SERVER
-        BufferedReader reader = null;
         PrintWriter writer = null;
         if (run == true) {
             try {
@@ -71,26 +68,8 @@ public class Client {
             /**
              * TODO: DO YOUR THINGY HERE THAT MAKES THE PROGRAM MOVE ON FROM THIS LINE WHEN THIS METHOD IS DONE RUNNING
              * */
-            //int i;
             TeacherGUI.runTeacherGUI();
-            /*if (i == 1) {
-                run = false;
-            }*/
         }
-
-
-        //PRINTS WHAT THE SERVER SENT BACK - only used for testing
-        if (run == true) {
-            try {
-                String s1 = reader.readLine();
-                JOptionPane.showMessageDialog(null, s1, "Quiz System",
-                        JOptionPane.PLAIN_MESSAGE);
-            } catch (Exception e) {
-                run = false;
-            }
-        }
-
-
         //HANDLES ANY CONNECTION ERRORS AND CLOSES THE CLIENT
         if (run == false) {
             try {
@@ -120,5 +99,34 @@ public class Client {
         writer.flush();
     }
 
+    /**
+     * @param filename .txt name of file to be written to
+     */
+    public static void readResponseAndWriteItToAFile(String filename){
+        try{
+            String s1 = reader.readLine();
+            String[] lines = s1.split(",");
+            FileWriter fileWriter = new FileWriter("new" + filename);
+            for(int i = 0; i < lines.length; i++){
+                fileWriter.write(lines[i] + "\n");
+            }
+            fileWriter.close();
+        } catch (Exception e){
+            System.out.println("Error reading to and creating a new file");
+        }
+    }
+
+    /**
+     * @param filename .txt name of file from string line to be sent to
+     * @param contents string line to be sent to the server
+     */
+    public static void sendStuffToTheServer(String filename, String contents){
+        try{
+            Client.sendToServer(filename, contents);
+            Client.readResponseAndWriteItToAFile(filename);
+        } catch (Exception s){
+            System.out.println("Sending and returning from server");
+        }
+    }
 
 }

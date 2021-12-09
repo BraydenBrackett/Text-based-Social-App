@@ -1,9 +1,6 @@
 package com.company;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -34,18 +31,21 @@ public class Server {
              * Note: Loop is only terminated after server timeout or if an error
              * is thrown. Errors will be thrown if the client disconnects.
              * */
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            writer = new PrintWriter(socket.getOutputStream());
             while (true) {
-                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                writer = new PrintWriter(socket.getOutputStream());
-
-                //Default server functions for now
-                String message = reader.readLine() + reader.readLine();
-                String response = "Server was given: " + message;
-
-                writer.write(response);
+                //Reads in the two lines that are always sent
+                String filepath = reader.readLine();
+                String message = reader.readLine();
+                //Writes those contents to a given file, unless the message is blank
+                if(!message.equals("")) {
+                    writeToFile(filepath, message);
+                }
+                //Sends that file with the updated info back to the client
+                String toServer = readFile(filepath);
+                writer.write(toServer);
                 writer.println();
                 writer.flush();
-
             }
         } catch (Exception e) {
             if (writer != null && reader != null) {
@@ -53,6 +53,38 @@ public class Server {
                 reader.close();
             }
             return;
+        }
+    }
+
+    /**
+     * @param filename .txt name of file to be read from
+     * @return a string with ','s between lines of file
+     */
+    public static String readFile(String filename){
+        String rtn = "";
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String readIn;
+            while ((readIn = br.readLine()) != null) {
+                rtn += readIn + ",";
+            }
+        } catch (Exception e){
+            System.out.println("You didn't put in a correct filepath");
+        }
+        return rtn;
+    }
+
+    /**
+     * @param filename .txt name of file to be written to
+     * @param contents string line to be added to file
+     */
+    public static void writeToFile(String filename, String contents){
+        try{
+            FileWriter fileWriter = new FileWriter(filename, true);
+            fileWriter.write("\n" + contents);
+            fileWriter.close();
+        } catch (Exception e){
+            System.out.println("You didn't put in a correct filepath");
         }
     }
 }
