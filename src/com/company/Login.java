@@ -1,4 +1,3 @@
-package com.company;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -168,6 +167,33 @@ public class Login extends JComponent implements Runnable{
         panelRegister.add(register);
         contentRegister.add(panelRegister, BorderLayout.NORTH);
 
+
+        JLabel usernameLabel = new JLabel("Enter Username:");
+        JPanel username123 = new JPanel();
+        Container contentEdit = frameEdit.getContentPane();
+        username123.add(usernameLabel);
+        contentEdit.add(username123, BorderLayout.CENTER);
+
+        JLabel passwordL = new JLabel("Enter Password:");
+
+        JTextField us = new JTextField(10);
+        username123.add(us);
+        contentEdit.add(username123, BorderLayout.CENTER);
+
+
+        JPanel password123 = new JPanel();
+        password123.add(passwordL);
+        contentEdit.add(password123, BorderLayout.CENTER);
+        JTextField pw = new JTextField(10);
+        password123.add(pw);
+        contentEdit.add(password123, BorderLayout.CENTER);
+
+        JButton done = new JButton("Done");
+        JPanel donePanel = new JPanel();
+        donePanel.add(done);
+        contentEdit.add(donePanel, BorderLayout.SOUTH);
+
+
         unLabel = new JLabel("Enter Username:");
         unLabel.setFont(new Font("Calibri", Font.PLAIN, 12));
         panelUN.add(unLabel);
@@ -241,6 +267,9 @@ public class Login extends JComponent implements Runnable{
         frameRegister.setSize(300, 180);
         frameRegister.setLocationRelativeTo(null);
         frameRegister.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frameEditDel.setSize(300, 180);
+        frameEditDel.setLocationRelativeTo(null);
+        frameEditDel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         //frameLogin.setVisible(true);
 
         frameAccount.setSize(300, 180);
@@ -288,10 +317,23 @@ public class Login extends JComponent implements Runnable{
                 frameEdit.setVisible(true);
                 frameLogin.setVisible(false);
                 frameRegister.setVisible(false);
+                frameEditDel.setVisible(false);
             }
         });
+        done.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editAccount(username.getText(), us.getText(),pw.getText());
+                frameEdit.setVisible(false);
+                us.setText("");
+                pw.setText("");
+                frameEditDel.setVisible(true);
+            }
+        });
+
         deleteAcc.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                deleteAccount(username1.getText());
                 //frameEdit.setVisible(true);
                 frameLogin.setVisible(false);
                 frameRegister.setVisible(false);
@@ -301,6 +343,7 @@ public class Login extends JComponent implements Runnable{
             public void actionPerformed(ActionEvent e) {
                 frameEdit.setVisible(false);
                 frameAccount.setVisible(true);
+                frameEditDel.setVisible(false);
             }
         });
     }
@@ -536,19 +579,15 @@ public class Login extends JComponent implements Runnable{
 
             psswrd = password.getText();
 
-            //System.out.println(teacherPrompt);
             String isTeacher = teacherYN;
-            //System.out.println("username:" + usrnme);
-            //System.out.println("password:" + psswrd);
-            //System.out.println("teacherYN:" + isTeacher);
+
 
             if (isTeacher.equals("") || usrnme.equals("") || psswrd.equals("")) {
-                //JOptionPane.showMessageDialog(frame);
-                System.out.println(credentialsError);
+                JOptionPane.showMessageDialog(null,credentialsError);
             } else if (!isTeacher.toLowerCase().equals("y") && !isTeacher.toLowerCase().equals("n")) {
-                System.out.println(credentialsError);
+                JOptionPane.showMessageDialog(null,credentialsError);
             } else if (psswrd.contains(",") || usrnme.contains(",")) {
-                System.out.println(credentialsError);
+                JOptionPane.showMessageDialog(null,credentialsError);
             } else {
                 runLoginProcess = false;
                 isTeacherFlag = isTeacher.toLowerCase().equals("y");
@@ -561,31 +600,11 @@ public class Login extends JComponent implements Runnable{
                 }
             }
         }
-        System.out.println("Would you like to edit your account? yes/no");
-        String edit = scanner.nextLine();
-        if (edit.toLowerCase().equals("yes")) {
-            while (true) {
-                System.out.println("Please enter or change the username");
-                String user = scanner.nextLine();
-                System.out.println("Please enter or change password");
-                String pass = scanner.nextLine();
-                if (doesAccountExist(user, pass, false)) {
-                    System.out.println("Error, an account with those credentials already exists");
-                } else {
-                    editAccount(user, pass, usrnme);
-                    break;
-                }
-            }
-        }
-        System.out.println("Would you like to delete your account? yes/no");
-        String delete = scanner.nextLine();
-        if (delete.toLowerCase().equals("yes")) {
-            deleteAccount(usrnme);
-        }
+
         if (isTeacherFlag) {
             TeacherGUI.runTeacherGUI();
         } else {
-               StudentGUI.runStudentGUI();
+            StudentGUI.runStudentGUI();
         }
     }
     public static void main(String[] args) throws IOException {
