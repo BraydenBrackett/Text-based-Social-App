@@ -68,6 +68,7 @@ public class Client {
             /**
              * TODO: DO YOUR THINGY HERE THAT MAKES THE PROGRAM MOVE ON FROM THIS LINE WHEN THIS METHOD IS DONE RUNNING
              * */
+            //Login.main(null);
             TeacherGUI.runTeacherGUI();
         }
         //HANDLES ANY CONNECTION ERRORS AND CLOSES THE CLIENT

@@ -40,6 +40,8 @@ public class Server {
                 //Writes those contents to a given file, unless the message is blank
                 if(!message.equals("")) {
                     writeToFile(filepath, message);
+                } else {
+                    clearFile(filepath);
                 }
                 //Sends that file with the updated info back to the client
                 String toServer = readFile(filepath);
@@ -76,12 +78,25 @@ public class Server {
 
     /**
      * @param filename .txt name of file to be written to
-     * @param contents string line to be added to file
+     * @param contents string line to be added to file, will sometimes create empty rows at the front of the list
      */
     public static void writeToFile(String filename, String contents){
         try{
             FileWriter fileWriter = new FileWriter(filename, true);
-            fileWriter.write("\n" + contents);
+            fileWriter.write(contents + "\n");
+            fileWriter.close();
+        } catch (Exception e){
+            System.out.println("You didn't put in a correct filepath");
+        }
+    }
+
+    /**
+     * @param filename path to file that's being cleared
+     */
+    public static void clearFile(String filename){
+        try{
+            FileWriter fileWriter = new FileWriter(filename, false);
+            fileWriter.write("");
             fileWriter.close();
         } catch (Exception e){
             System.out.println("You didn't put in a correct filepath");
