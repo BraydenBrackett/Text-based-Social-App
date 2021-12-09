@@ -1,8 +1,8 @@
 # CS180-Project_05
 ## Operation Instructions:
-1. Run the Server.java class
-2. Run the Client.java class 
-3. Run as many other Client.java classes as you'd like
+1. Run the Server.java class using the green arrow
+2. Run the Client.java class using the green arrow
+3. Run as many other Client.java classes as you'd like as long as you're using the green arrow or fully compliling the project
 ## Who Submitted Which Part:
 - All Code and Subsequent Code Related Files - TODO AT TUESDAY'S MEETING 
 - Report - Brayden 
