@@ -1,4 +1,3 @@
-package com.company;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -72,7 +71,7 @@ public class Login extends JComponent implements Runnable{
     int oldX; // previous mouse x coordinate
     int oldY; // previous mouse y coordinate
 
-    MainGUI mainGUI; // variable of the type Paint
+    Login loginGUI; // variable of the type Paint
     Color color;
     Color filledColor;
     Random randGen;
@@ -113,25 +112,23 @@ public class Login extends JComponent implements Runnable{
         Container contentLogin = frameLogin.getContentPane();
         contentAccEditDel.setLayout(new BorderLayout());
         contentLogin.setLayout(new BorderLayout());
-        mainGUI = new MainGUI();
-        contentLogin.add(mainGUI, BorderLayout.CENTER);
+        loginGUI = new Login();
+        contentLogin.add(loginGUI, BorderLayout.CENTER);
 
         Container contentRegister = frameRegister.getContentPane();
         contentRegister.setLayout(new BorderLayout());
-        mainGUI = new MainGUI();
-        contentRegister.add(mainGUI, BorderLayout.CENTER);
+        contentRegister.add(loginGUI, BorderLayout.CENTER);
 
         Container contentMenu = frameMenu.getContentPane();
         contentMenu.setLayout(new BorderLayout());
-        mainGUI = new MainGUI();
-        contentMenu.add(mainGUI, BorderLayout.CENTER);
+        contentMenu.add(loginGUI, BorderLayout.CENTER);
 
         JPanel panelPrompt = new JPanel();
         JPanel panelEditDel = new JPanel();
         editDelPrompt = new JLabel("Would you like to edit or delete your account?");
-        editDelPrompt.setFont(new Font("Calibri", Font.PLAIN, 20));
+        editDelPrompt.setFont(new Font("Calibri", Font.PLAIN, 12));
         panelPrompt.add(editDelPrompt);
-        contentRegister.add(panelEditDel, BorderLayout.NORTH);
+        contentAccEditDel.add(panelPrompt, BorderLayout.NORTH);
 
         editAcc = new JButton("Edit Account");
         panelEditDel.add(editAcc);
@@ -142,8 +139,9 @@ public class Login extends JComponent implements Runnable{
         contentAccEditDel.add(panelEditDel, BorderLayout.CENTER);
 
         returnButton = new JButton("No");
-        panelEditDel.add(returnButton);
-        contentAccEditDel.add(panelEditDel, BorderLayout.SOUTH);
+        JPanel panelNo = new JPanel();
+        panelNo.add(returnButton);
+        contentAccEditDel.add(panelNo, BorderLayout.SOUTH);
 
         JPanel panelUN = new JPanel();
         JPanel panelPW = new JPanel();
@@ -168,26 +166,25 @@ public class Login extends JComponent implements Runnable{
         panelRegister.add(register);
         contentRegister.add(panelRegister, BorderLayout.NORTH);
 
+        Container contentEdit = frameEdit.getContentPane();
+        JPanel username123 = new JPanel();
+        JPanel password123 = new JPanel();
 
         JLabel usernameLabel = new JLabel("Enter Username:");
-        JPanel username123 = new JPanel();
-        Container contentEdit = frameEdit.getContentPane();
         username123.add(usernameLabel);
         contentEdit.add(username123, BorderLayout.CENTER);
-
-        JLabel passwordL = new JLabel("Enter Password:");
 
         JTextField us = new JTextField(10);
         username123.add(us);
         contentEdit.add(username123, BorderLayout.CENTER);
 
+        JLabel passwordL = new JLabel("Enter Password:");
+        username123.add(passwordL);
+        contentEdit.add(username123, BorderLayout.CENTER);
 
-        JPanel password123 = new JPanel();
-        password123.add(passwordL);
-        contentEdit.add(password123, BorderLayout.CENTER);
         JTextField pw = new JTextField(10);
-        password123.add(pw);
-        contentEdit.add(password123, BorderLayout.CENTER);
+        username123.add(pw);
+        contentEdit.add(username123, BorderLayout.CENTER);
 
         JButton done = new JButton("Done");
         JPanel donePanel = new JPanel();
@@ -260,7 +257,7 @@ public class Login extends JComponent implements Runnable{
         teacher = new JButton("Teacher");
         panelAcc2.add(teacher);
         contentAcc.add(panelAcc2, BorderLayout.CENTER);
-        frameLogin.setSize(300, 180);
+        frameLogin.setSize(485, 130);
         frameLogin.setLocationRelativeTo(null);
         frameLogin.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frameLogin.setVisible(true);
@@ -268,12 +265,17 @@ public class Login extends JComponent implements Runnable{
         frameRegister.setSize(300, 180);
         frameRegister.setLocationRelativeTo(null);
         frameRegister.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frameEditDel.setSize(300, 180);
+
+        frameEdit.setSize(300, 130);
+        frameEdit.setLocationRelativeTo(null);
+        frameEdit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        frameEditDel.setSize(300, 130);
         frameEditDel.setLocationRelativeTo(null);
         frameEditDel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         //frameLogin.setVisible(true);
 
-        frameAccount.setSize(300, 180);
+        frameAccount.setSize(300, 100);
         frameAccount.setLocationRelativeTo(null);
         frameAccount.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         submit.addActionListener(new ActionListener() {
@@ -299,11 +301,13 @@ public class Login extends JComponent implements Runnable{
         });
         teacher.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                frameAccount.setVisible(false);
                 teacherYN = "y";
             }
         });
         student.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                frameAccount.setVisible(false);
                 teacherYN = "n";
                 try {
                     login();
