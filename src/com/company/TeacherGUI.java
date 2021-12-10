@@ -5,11 +5,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 
 public class TeacherGUI extends Thread implements Runnable {
     //Return value variable
     //private static int returnValue = 0;
-    
+
     //All buttons and frames for teacher options
     JFrame frame;
     JFrame readFrame;
@@ -89,7 +90,7 @@ public class TeacherGUI extends Thread implements Runnable {
             //read quiz
             if (e.getSource() == readQuizButton) {
                 //EXAMPLE OF HOW TO WRITE TO THE SERVER
-                //Client.sendStuffToTheServer("ServerFile.txt","");
+                //Client.sendStuffToTheServer("ServerFile.txt","sent from readQuizButton");
 
                 frame.setVisible(false);
                 readFrame.setVisible(true);
@@ -106,9 +107,6 @@ public class TeacherGUI extends Thread implements Runnable {
             }
             //create quiz
             if (e.getSource() == createQuizButton) {
-                //EXAMPLE OF HOW TO WRITE TO THE SERVER
-                //Client.sendStuffToTheServer("ServerFile.txt","1234");
-
                 frame.setVisible(false);
                 createFrame.setVisible(true);
             }
@@ -184,10 +182,12 @@ public class TeacherGUI extends Thread implements Runnable {
         }
     };
 
-    public void runReadQuiz() {
+    public void runReadQuiz() {//needs a way to read in file from client
         try {
             //read in file to print out
-            File file = new File(input);
+            //Client.sendStuffToTheServer(input, "");
+            //cant read just erases
+            File file = new File("new" + input);
             String[][] quiz = Teacher.readQuizFile(file);
             readQuizArea.setText("");
             for (int i = 0; i < quiz.length; i++) {
@@ -212,7 +212,6 @@ public class TeacherGUI extends Thread implements Runnable {
                 //would write file with the name to server
                 name = input;
                 readQuiz = new Quiz(name);
-                readFile = new File(name);
                 createQuizArea.setText("What type of question would you like to add to the quiz?\n" +
                         "1. Multiple Choice Question\n" +
                         "2. Free Response Question\n" +
@@ -249,8 +248,11 @@ public class TeacherGUI extends Thread implements Runnable {
                             } else if (insideCount == 5) {
                                 mc4 = createEnterText.getText();
                                 createEnterText.setText("");
-                                //would write the question to the server
-                                readQuiz.addQuestion(new MCQuestion(input, mc1, mc2, mc3, mc4));
+                                //MCQ is not needed now
+                                //readQuiz.addQuestion(new MCQuestion(input, mc1, mc2, mc3, mc4));
+                                Client.sendStuffToTheServer(name, "MC: " + input);
+                                Client.sendStuffToTheServer(name, String.format("A: %s B: %s C: %s D: %s", mc1, mc2, mc3, mc4));
+                                Client.sendStuffToTheServer(name, " ");
                                 createQuizArea.setText("Would you like to add another question? (Y/N)");
                             } else if (insideCount == 6) {
                                 input = createEnterText.getText().toLowerCase();
@@ -277,27 +279,30 @@ public class TeacherGUI extends Thread implements Runnable {
                                 createEnterText.setText("");
                             } else if (insideCount == 1) {
                                 input = createEnterText.getText();
-                                //would write the question to the server
-                                readQuiz.addQuestion(new FRQQuestion(input));
+                                //FRQ not needed now
+                                //readQuiz.addQuestion(new FRQQuestion(input));
+                                Client.sendStuffToTheServer(name, "FRQ: " + input);
+                                Client.sendStuffToTheServer(name, "Answer: ");
+                                Client.sendStuffToTheServer(name, " ");
                                 createQuizArea.setText("Would you like to add another question? (Y/N)");
                                 createEnterText.setText("");
                             } else if (insideCount == 2) {
-                                    input = createEnterText.getText().toLowerCase();
-                                    if (input.equals("y") || input.equals("yes")) {
-                                        createQuizArea.setText("What type of question would you like to add to the quiz?\n" +
-                                                "1. Multiple Choice Question\n" +
-                                                "2. Free Response Question\n" +
-                                                "3. Fill In the Blank Question\n");
-                                        createEnterText.setText("");
-                                        insideCount = -1;
-                                    } else {
-                                        createQuizArea.setText("Would you like to randomize the order" +
-                                                " of questions for this quiz? (Y/N)");
-                                        createEnterText.setText("");
-                                        insideCount = -1;
-                                        createCount = 2;
-                                    }
+                                input = createEnterText.getText().toLowerCase();
+                                if (input.equals("y") || input.equals("yes")) {
+                                    createQuizArea.setText("What type of question would you like to add to the quiz?\n" +
+                                            "1. Multiple Choice Question\n" +
+                                            "2. Free Response Question\n" +
+                                            "3. Fill In the Blank Question\n");
+                                    createEnterText.setText("");
+                                    insideCount = -1;
+                                } else {
+                                    createQuizArea.setText("Would you like to randomize the order" +
+                                            " of questions for this quiz? (Y/N)");
+                                    createEnterText.setText("");
+                                    insideCount = -1;
+                                    createCount = 2;
                                 }
+                            }
                             insideCount ++;
                             break;
                         case 3:
@@ -306,8 +311,11 @@ public class TeacherGUI extends Thread implements Runnable {
                                 createEnterText.setText("");
                             } else if (insideCount == 1) {
                                 input = createEnterText.getText();
-                                //would write the question to the server
-                                readQuiz.addQuestion(new FillInBlankQuestion(input));
+                                //FIB not needed now
+                                //readQuiz.addQuestion(new FillInBlankQuestion(input));
+                                Client.sendStuffToTheServer(name, "Fill in the blank: " + input);
+                                Client.sendStuffToTheServer(name, "Answer: _________");
+                                Client.sendStuffToTheServer(name, " ");
                                 createQuizArea.setText("Would you like to add another question? (Y/N)");
                                 createEnterText.setText("");
                             } else if (insideCount == 2) {
@@ -342,7 +350,7 @@ public class TeacherGUI extends Thread implements Runnable {
                         createQuizArea.setText("Quiz randomized!" +
                                 "\nYou have successfully created the quiz!" +
                                 "\nPlease enter the course pathname you would like to add this quiz to.");
-                        //add write for quiz randomization to the server
+                        Client.sendStuffToTheServer(name, "y");
 
                     } else {
                         createQuizArea.setText("The quiz was not randomized." +
@@ -353,8 +361,9 @@ public class TeacherGUI extends Thread implements Runnable {
                     input = createEnterText.getText();
                     createEnterText.setText("");
                     try {
-                        //write course with quiz name to server
-                        Teacher.addToCourse(new File(input), readQuiz.getQuizFileName());
+                        //Don't need to add to course now
+                        //Teacher.addToCourse(new File(input), readQuiz.getQuizFileName());
+                        Client.sendStuffToTheServer(input, name);
                         createQuizArea.setText("Please press return to go back to the teacher menu.");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null,
@@ -369,9 +378,7 @@ public class TeacherGUI extends Thread implements Runnable {
 
     public void runDeleteQuiz() {
         try {
-            //would send file name to server to delete
-            File file = new File(input);
-            Teacher.deleteQuiz(file);
+            Client.sendStuffToTheServer(input, "");
             deleteQuizArea.setText("Quiz successfully deleted.");
             deleteQuizText.setText("");
         } catch (Exception ex) {
@@ -386,7 +393,9 @@ public class TeacherGUI extends Thread implements Runnable {
             case 0:
                 try {
                     setInput(modifyQuizText.getText());
+                    //needs to read in from server
                     File file = new File(input);
+                    //------------
                     String[][] quiz = Teacher.readQuizFile(file);
                     for (int i = 0; i < quiz.length; i++) {
                         modifyQuizArea.append(quiz[i][0] + "\n");
@@ -401,8 +410,10 @@ public class TeacherGUI extends Thread implements Runnable {
                 break;
             case 1:
                 //write this to server replacing old quiz
-                modifyQuizArea.getText();
-                //pw to the server here using the modify get text
+                String[] temp = modifyQuizArea.getText().split("\\n");
+                for (String s : temp) {
+                    Client.sendStuffToTheServer(input, s);
+                }
                 break;
         }
     }
@@ -432,6 +443,10 @@ public class TeacherGUI extends Thread implements Runnable {
                 gradeQuizArea.getText();
                 //would write to the server with gradeQuizArea get text
                 //that should give the entire quiz as graded
+                String[] temp = gradeQuizArea.getText().split("\\n");
+                for (String s : temp) {
+                    Client.sendStuffToTheServer(input, s);
+                }
                 break;
         }
     }
