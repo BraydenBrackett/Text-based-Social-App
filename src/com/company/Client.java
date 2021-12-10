@@ -119,7 +119,9 @@ public class Client {
 
     /**
      * @param filename .txt name of file from string line to be sent to
-     * @param contents string line to be sent to the server
+     * @param contents string line to be sent to the server and added
+     * -contents of "" will clear the file
+     * -contents of * will just return the file contents without adding anything
      */
     public static void sendStuffToTheServer(String filename, String contents){
         try{

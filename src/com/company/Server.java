@@ -38,9 +38,9 @@ public class Server {
                 String filepath = reader.readLine();
                 String message = reader.readLine();
                 //Writes those contents to a given file, unless the message is blank
-                if(!message.equals("")) {
+                if(!message.equals("") && !message.equals("*")) {
                     writeToFile(filepath, message);
-                } else {
+                } else if (message.equals("")) {
                     clearFile(filepath);
                 }
                 //Sends that file with the updated info back to the client

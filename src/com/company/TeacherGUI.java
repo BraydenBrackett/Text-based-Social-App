@@ -90,7 +90,7 @@ public class TeacherGUI extends Thread implements Runnable {
             //read quiz
             if (e.getSource() == readQuizButton) {
                 //EXAMPLE OF HOW TO WRITE TO THE SERVER
-                //Client.sendStuffToTheServer("ServerFile.txt","sent from readQuizButton");
+                //Client.sendStuffToTheServer("ServerFile.txt","*");
 
                 frame.setVisible(false);
                 readFrame.setVisible(true);
