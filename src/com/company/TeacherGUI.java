@@ -49,6 +49,8 @@ public class TeacherGUI extends Thread implements Runnable {
     private String mc4 = "";
     private Quiz readQuiz;
     private File readFile;
+    private File fileMod;
+    private File fileGrade;
 
 
     //delete quiz GUI
@@ -74,6 +76,7 @@ public class TeacherGUI extends Thread implements Runnable {
     private String input;
     private int intInput;
     private String name = "";
+    private File quizTemp;
 
 
     public void setInput(String input) {
@@ -187,6 +190,7 @@ public class TeacherGUI extends Thread implements Runnable {
             //read in file to print out
             //Client.sendStuffToTheServer(input, "");
             //cant read just erases
+            Client.sendStuffToTheServer(input, "*");
             File file = new File("new" + input);
             String[][] quiz = Teacher.readQuizFile(file);
             readQuizArea.setText("");
@@ -198,6 +202,7 @@ public class TeacherGUI extends Thread implements Runnable {
                     readQuizArea.append(quiz[i][1] + "\n\n");
                 }
             }
+            file.delete();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,
                     "Invalid file path name", "Error", JOptionPane.ERROR_MESSAGE);
@@ -212,6 +217,7 @@ public class TeacherGUI extends Thread implements Runnable {
                 //would write file with the name to server
                 name = input;
                 readQuiz = new Quiz(name);
+                quizTemp = new File("new" + name);
                 createQuizArea.setText("What type of question would you like to add to the quiz?\n" +
                         "1. Multiple Choice Question\n" +
                         "2. Free Response Question\n" +
@@ -363,7 +369,11 @@ public class TeacherGUI extends Thread implements Runnable {
                     try {
                         //Don't need to add to course now
                         //Teacher.addToCourse(new File(input), readQuiz.getQuizFileName());
+
+                        File file = new File("new" + input);
                         Client.sendStuffToTheServer(input, name);
+                        file.delete();
+                        quizTemp.delete();
                         createQuizArea.setText("Please press return to go back to the teacher menu.");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null,
@@ -378,9 +388,11 @@ public class TeacherGUI extends Thread implements Runnable {
 
     public void runDeleteQuiz() {
         try {
+            File file = new File("new" + input);
             Client.sendStuffToTheServer(input, "");
             deleteQuizArea.setText("Quiz successfully deleted.");
             deleteQuizText.setText("");
+            file.delete();
         } catch (Exception ex) {
             deleteQuizArea.setText("Quiz was not deleted.");
             JOptionPane.showMessageDialog(null,
@@ -394,9 +406,11 @@ public class TeacherGUI extends Thread implements Runnable {
                 try {
                     setInput(modifyQuizText.getText());
                     //needs to read in from server
-                    File file = new File(input);
-                    //------------
-                    String[][] quiz = Teacher.readQuizFile(file);
+                    //File file = new File(input);
+
+                    Client.sendStuffToTheServer(input, "*");
+                    fileMod = new File("new" + input);
+                    String[][] quiz = Teacher.readQuizFile(fileMod);
                     for (int i = 0; i < quiz.length; i++) {
                         modifyQuizArea.append(quiz[i][0] + "\n");
                         modifyQuizArea.append(quiz[i][1] + "\n\n");
@@ -414,6 +428,7 @@ public class TeacherGUI extends Thread implements Runnable {
                 for (String s : temp) {
                     Client.sendStuffToTheServer(input, s);
                 }
+                fileMod.delete();
                 break;
         }
     }
@@ -424,8 +439,10 @@ public class TeacherGUI extends Thread implements Runnable {
                 try {
                     input = gradeQuizText.getText();
                     //would read from a file from the server here
-                    File file = new File(input);
-                    String[][] quiz = Teacher.readQuizTakenFile(file);
+                    //File file = new File(input);
+                    fileGrade = new File("new" + input);
+                    Client.sendStuffToTheServer(input, "*");
+                    String[][] quiz = Teacher.readQuizTakenFile(fileGrade);
                     gradeQuizArea.setText("Enter the points earned below each question.\n");
                     for (int i = 0; i < quiz.length; i++) {
                         gradeQuizArea.append((i + 1) + " " + quiz[i][0] + "\n");
@@ -447,6 +464,7 @@ public class TeacherGUI extends Thread implements Runnable {
                 for (String s : temp) {
                     Client.sendStuffToTheServer(input, s);
                 }
+                fileGrade.delete();
                 break;
         }
     }
