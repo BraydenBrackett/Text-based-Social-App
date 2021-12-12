@@ -1,4 +1,3 @@
-package com.company;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -324,10 +323,7 @@ public class Login extends JComponent implements Runnable{
                 if(us.equals("")){
                     pw = password1.getText();
                 }
-                if (!doesAccountExist(us, pw, true)) {
-                    Account acc = createNewAccount(us, pw, true);
-                    Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(acc));
-                }
+                Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(createNewAccount(us,pw,true)));
                 TeacherGUI.runTeacherGUI();
             }
         });
@@ -343,12 +339,9 @@ public class Login extends JComponent implements Runnable{
                 if(us.equals("")){
                     pw = password1.getText();
                 }
-                if (!doesAccountExist(us, pw, false)) {
-                    Account acc = createNewAccount(us, pw, false);
-                    Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(acc));
-                }
-
-
+                Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(createNewAccount(us,pw,false)));
+                
+                
                 try {
                     login();
                 } catch (IOException ex) {
@@ -488,7 +481,7 @@ public class Login extends JComponent implements Runnable{
      */
     public static void editAccount(String username, String password, String tempAcc) {
         ArrayList<Account> accounts = readInAccounts();
-        //System.out.println(accounts.size());
+        System.out.println(accounts.size());
         for (int i = 0; i < accounts.size(); i++) {
             if (accounts.get(i).getUsername().equals(tempAcc)) {
                 accounts.get(i).setUsername(username);
@@ -530,8 +523,8 @@ public class Login extends JComponent implements Runnable{
     public static String addAccountToFile(Account account) {
         try {
             FileWriter fileWriter = new FileWriter(filepath, true);
-           /* fileWriter.write(account.getUsername() + ","
-                    + account.getPassword() + "," + account.isTeacher() + "\n");*/
+            fileWriter.write(account.getUsername() + ","
+                    + account.getPassword() + "," + account.isTeacher() + "\n");
             fileWriter.close();
             return "Username:" + account.getUsername() + "," +
                     "Password:" + account.getPassword() + "," +
@@ -644,7 +637,6 @@ public class Login extends JComponent implements Runnable{
                 if (!doesAccountExist(usrnme, psswrd, isTeacherFlag)) {
                     loggedInAccount = createNewAccount(usrnme, psswrd, isTeacherFlag);
                     Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(loggedInAccount));
-                    Client.sendStuffToTheServer("Accounts.txt", "*");
                     if (isTeacherFlag) {
                         teacher = new Teacher(usrnme, psswrd, true);
                     }
