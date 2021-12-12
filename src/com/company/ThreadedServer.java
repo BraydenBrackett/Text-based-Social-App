@@ -2,25 +2,39 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * ThreadedServer
+ *
+ * Server that allows for multiple clients to be connected at the same time,
+ * utilizes threading to create a new thread of RequestHandler every time a new
+ * client connects to the server.
+ *
+ * @author Erik Nelson, L13
+ * @version December 10, 2021
+ */
+
 public class ThreadedServer extends Thread{
 
+    //Class-wide variables
     private ServerSocket serverSocket;
     private boolean serverRunning = false;
     private int port;
-    
-    //Main method, once client connects, the rest of the code is executed.
+
+    //Main method, which initializes a ThreadedServer
     public static void main(String[] args) {
         ThreadedServer server = new ThreadedServer(4242);
         server.startSever();
     }
-    
+
+    //Initializes the ThreadedServer with the given port input
     public ThreadedServer(int port) {
         this.port = port;
     }
 
+    //Creates a server socket and runs calls the server thread
     public void startSever() {
         try {
-            serverSocket = new ServerSocket(4242);
+            serverSocket = new ServerSocket(port);
             this.start();
         }
         catch (IOException e) {
@@ -28,6 +42,10 @@ public class ThreadedServer extends Thread{
         }
     }
 
+    /*
+    * Listens for connections to the server, if a new client connects to the server,
+    * a new RequestHandler thread is created to handle the processes from the client.
+    */
     public void run() {
         serverRunning = true;
         while (serverRunning == true) {
@@ -43,8 +61,11 @@ public class ThreadedServer extends Thread{
             }
         }
     }
-    
-    //Handles all server requests
+
+    /*
+    * Handles all server requests by creating a thread for each client,
+    * each thread has its own readers and writers
+    */
     class RequestHandler extends Thread {
         private Socket socket;
 
@@ -78,7 +99,7 @@ public class ThreadedServer extends Thread{
             }
         }
     }
-    
+
     /**
      * @param filename .txt name of file to be read from
      * @return a string with ','s between lines of file
@@ -89,7 +110,7 @@ public class ThreadedServer extends Thread{
             BufferedReader br = new BufferedReader(new FileReader(filename));
             String readIn;
             while ((readIn = br.readLine()) != null) {
-                rtn += readIn + "~";
+                rtn += readIn + ",";
             }
         } catch (Exception e){
             System.out.println("You didn't put in a correct filepath");
