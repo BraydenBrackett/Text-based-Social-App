@@ -323,7 +323,10 @@ public class Login extends JComponent implements Runnable{
                 if(us.equals("")){
                     pw = password1.getText();
                 }
-                Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(createNewAccount(us,pw,true)));
+                if (!doesAccountExist(us, pw, true)) {
+                    Account acc = createNewAccount(us, pw, true);
+                    Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(acc));
+                }
                 TeacherGUI.runTeacherGUI();
             }
         });
@@ -339,9 +342,12 @@ public class Login extends JComponent implements Runnable{
                 if(us.equals("")){
                     pw = password1.getText();
                 }
-                Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(createNewAccount(us,pw,false)));
-                
-                
+                if (!doesAccountExist(us, pw, false)) {
+                    Account acc = createNewAccount(us, pw, false);
+                    Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(acc));
+                }
+
+
                 try {
                     login();
                 } catch (IOException ex) {
@@ -481,7 +487,7 @@ public class Login extends JComponent implements Runnable{
      */
     public static void editAccount(String username, String password, String tempAcc) {
         ArrayList<Account> accounts = readInAccounts();
-        System.out.println(accounts.size());
+        //System.out.println(accounts.size());
         for (int i = 0; i < accounts.size(); i++) {
             if (accounts.get(i).getUsername().equals(tempAcc)) {
                 accounts.get(i).setUsername(username);
