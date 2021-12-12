@@ -315,6 +315,15 @@ public class Login extends JComponent implements Runnable{
                 frameAccount.setVisible(false);
                 teacherYN = "y";
                 System.out.println(teacherYN);
+                String us = username.getText();
+                if(us.equals("")){
+                    us = username1.getText();
+                }
+                String pw = password.getText();
+                if(us.equals("")){
+                    pw = password1.getText();
+                }
+                Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(createNewAccount(us,pw,true)));
                 TeacherGUI.runTeacherGUI();
             }
         });
@@ -322,6 +331,17 @@ public class Login extends JComponent implements Runnable{
             public void actionPerformed(ActionEvent e) {
                 frameAccount.setVisible(false);
                 teacherYN = "n";
+                String us = username.getText();
+                if(us.equals("")){
+                    us = username1.getText();
+                }
+                String pw = password.getText();
+                if(us.equals("")){
+                    pw = password1.getText();
+                }
+                Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(createNewAccount(us,pw,false)));
+                
+                
                 try {
                     login();
                 } catch (IOException ex) {
