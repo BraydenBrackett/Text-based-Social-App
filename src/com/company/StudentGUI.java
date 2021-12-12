@@ -1,237 +1,198 @@
-package com.company;
-
 import javax.swing.*;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Scanner;
-
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
 /**
- * Student
+ * Student GUI
  * <p>
- * Class that handles the student function
- * takes a quiz file and reads it
- * allows student to take and view graded quizzes
+ * Interface allows student user to view and take quizzes.
  *
- * @author Brandon Kingma, L12
- * @version November 11, 2021
+ * @author Harshini Musku, L12
+ * @version December 11, 2021
  */
+public class StudentGUI implements Runnable {
+    static JLabel fileNamee;
+    static JTextField username; // text field for username
+    static JButton submit; // button to submit credentials
+    static JButton registerHere; // button to submit credentials
+    static JButton loginHere; // button to submit credentials
 
-public class Student extends Account {
+    static Student student;
 
-    private ArrayList<String> quizTaken;
+    static StudentGUI studentGUI; // variable of the type Paint
+    static Color color;
+    static Color filledColor;
+    static Random randGen;
+    static JFrame frameLogin;
+    static JFrame frameRegister;
+    static JFrame frameMenu;
+    static JFrame frameAccount;
+    static JFrame frameQuiz;
 
-    public Student(String username, String password, boolean isTeacher) {
-        super(username, password, isTeacher);
-    }
+    static JLabel accountLabel;
+    static JButton viewQuiz;
+    static JButton takeQuiz;
+    static String teacherYN;
 
-    /**
-     * reads the quiz file to a 2D array and returns it to use later
-     *
-     * @param file
-     * @return
-     * @throws IOException
-     */
-    public static String[][] readQuizFile(File file) throws IOException {
-        ArrayList<String> questions = new ArrayList<String>();
-        ArrayList<String> answers = new ArrayList<String>();
+    public void run() {
+        student = new Student("user", "pass", false);
+        randGen = new Random();
+        frameLogin = new JFrame("Login");
+        frameRegister = new JFrame("Register");
+        frameMenu = new JFrame("Menu");
+        frameAccount = new JFrame(" Student Menu");
+        frameQuiz = new JFrame("Quiz");
 
-        FileReader fr = new FileReader(file);
-        BufferedReader br = new BufferedReader(fr);
-        String line = br.readLine();
-        while (line != null) {
-            questions.add(line);
-            line = br.readLine();
-            answers.add(line);
-            line = br.readLine();
-            line = br.readLine();
-        }
-        String[][] quiz = new String[questions.size()][2];
-        for (int i = 0; i < questions.size(); i++) {
-            quiz[i][0] = questions.get(i);
-            quiz[i][1] = answers.get(i);
+        Container contentAcc = frameAccount.getContentPane();
+        Container contentQuiz = frameQuiz.getContentPane();
+        contentQuiz.setLayout(new BorderLayout());
 
-        }
-        fr.close();
-        br.close();
-        return quiz;
-    }
+        Container contentLogin = frameLogin.getContentPane();
+        contentLogin.setLayout(new BorderLayout());
+        studentGUI = new StudentGUI();
+       // studentGUI.add(studentGUI,
+              //  BorderLayout.CENTER);
 
-    /**
-     * Prints the quiz for the student to see
-     *
-     * @param quiz
-     * @param graded
-     */
-    public static String printQuiz(String[][] quiz, boolean graded) {
-        String quizStr = "";
-        int questionNum = 1;
-        if (!graded) {
-            for (int i = 0; i < quiz.length; i++) {
-                for (int k = 0; k < 1; k++) {
-                    quizStr += questionNum + "."+ (quiz[i][k]) + "\n";
-                    questionNum++;
-                }
-            }
-        } else {
-            for (int i = 0; i < quiz.length; i++) {
-                for (int k = 0; k < 2; k++) {
-                    if (quiz[i][k] != null) {
-                        quizStr += questionNum + "."+ (quiz[i][k]) + "\n";
-                        questionNum++;
-                    }
-                }
-            }
-        }
-        return quizStr;
-    }
+        Container contentRegister = frameRegister.getContentPane();
+        contentRegister.setLayout(new BorderLayout());
+        studentGUI = new StudentGUI();
+        //contentRegister.add(studentGUI, BorderLayout.CENTER);
 
-    /**
-     * Writes the student answers to a new quiz file tagged with -taken
-     *
-     * @param quiz
-     * @param ans
-     * @param studentF
-     * @param name
-     * @throws IOException
-     */
-    public static String writeAnsToFile(String[][] quiz, String[] ans,
-                                      String[] studentF, String name) throws IOException {
-        String returnStr = "";
-        File tempF = new File(name + "-taken");
-        PrintWriter pw = new PrintWriter(new FileOutputStream(tempF));
-        for (int i = 0; i < quiz.length; i++) {
-            pw.write(quiz[i][0]);
-            returnStr += quiz[i][0] + "\n";
-            pw.println();
-            pw.flush();
-            pw.write(quiz[i][1]);
-            returnStr += quiz[i][1] + "\n";
-            pw.println();
-            pw.flush();
-            if (studentF[i] != null) {
-                pw.write(ans[i] + " " + studentF[i]);
-                returnStr += ans[i] + " " + studentF[i] + "\n";
-                pw.println();
-                pw.flush();
-            } else {
-                pw.write(ans[i]);
-                returnStr += ans[i] + "\n";
-                pw.println();
-                pw.flush();
-            }
-        }
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        pw.write(format.format(now));
-        returnStr += format.format(now);
-        pw.flush();
-        return returnStr;
-    }
+        Container contentMenu = frameMenu.getContentPane();
+        contentMenu.setLayout(new BorderLayout());
+        studentGUI = new StudentGUI();
+        //contentMenu.add(studentGUI, BorderLayout.CENTER);
 
-    /**
-     * method that prints the quiz file in a random order and
-     * allows the user to answer the questions and calls writeAnsToFile
-     *
-     * @param quiz
-     * @param name
-     * @throws IOException
-     */
-    public static String takeQuiz(String[][] quiz, String name) throws IOException {
-        String returnStr = "";
-        Scanner scanner = new Scanner(System.in);
-        String[] recordAns = new String[quiz.length];
-        String[] addToAns = new String[quiz.length];
-        String ans = "";
-        String addF = "";
-        String studentF;
-        String[][] tempQ = new String[quiz.length][2];
-        for (int k = 0; k < quiz.length; k++) {
-            tempQ[k][0] = quiz[k][0];
-            tempQ[k][1] = quiz[k][1];
-        }
-        int count = 0;
-        int randChoice = 0;
-        while (true) {
-            randChoice = (int) ((Math.random() * quiz.length));
-            if (!tempQ[randChoice][0].isEmpty()) {
-                JOptionPane.showMessageDialog(null,(tempQ[randChoice][0]));
-                JOptionPane.showMessageDialog(null,(tempQ[randChoice][1]));
-                ans = JOptionPane.showInputDialog(null,"Enter Answer:");
-                recordAns[randChoice] = ans;
-                addF = JOptionPane.showInputDialog(null,"Would you like to add a file? yes/no").toLowerCase();
-                if (addF.equals("yes")) {
-                    while (true) {
-                        //returnStr+=("Please enter the path to the file.")+"\n";
-                        studentF = JOptionPane.showInputDialog(null,"Please enter the path to the file.");
-                        if (Files.exists(Paths.get(studentF))) {
-                            addToAns[count] = studentF;
-                            break;
-                        } else {
-                            JOptionPane.showMessageDialog(null,"Error, not a valid file path");
+        JPanel panelLogin = new JPanel();
+        JPanel panelRegister = new JPanel();
+
+        JPanel panelQuiz = new JPanel();
+        JPanel panelUN = new JPanel();
+        JPanel panelPW = new JPanel();
+        JPanel panelSubmit = new JPanel();
+
+        JPanel panelUN1 = new JPanel();
+        JPanel panelPW1 = new JPanel();
+        JPanel panelSubmit1 = new JPanel();
+
+        JPanel panelAcc1 = new JPanel();
+        JPanel panelAcc2 = new JPanel();
+        JPanel panelAcc3 = new JPanel();
+
+
+        fileNamee = new JLabel("Enter Quiz Name:");
+        fileNamee.setFont(new Font("Calibri", Font.PLAIN, 12));
+        panelAcc1.add(fileNamee);
+        contentAcc.add(panelAcc1, BorderLayout.NORTH);
+
+        JTextField file = new JTextField(10);
+        panelAcc1.add(file);
+        contentAcc.add(panelAcc1, BorderLayout.NORTH);
+
+        viewQuiz = new JButton("View Quiz");
+        panelAcc2.add(viewQuiz);
+        contentAcc.add(panelAcc2, BorderLayout.CENTER);
+
+        takeQuiz = new JButton("Take Quiz");
+        panelAcc2.add(takeQuiz);
+        contentAcc.add(panelAcc2, BorderLayout.CENTER);
+        JButton submit2 = new JButton("Quit");
+        panelAcc3.add(submit2);
+        contentAcc.add(panelAcc3, BorderLayout.SOUTH);
+
+        JLabel quizContent = new JLabel("");
+        quizContent.setFont(new Font("Calibri", Font.PLAIN, 20));
+        panelQuiz.add(quizContent);
+        contentQuiz.add(panelRegister, BorderLayout.NORTH);
+
+        submit = new JButton("Done");
+        panelQuiz.add(submit);
+        contentQuiz.add(panelQuiz, BorderLayout.SOUTH);
+
+        viewQuiz.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frameAccount.setVisible(false);
+                frameQuiz.setVisible(true);
+                submit2.setVisible(true);
+                quizContent.setVisible(true);
+                try {
+                    //read in file to print out
+                    File file1 = new File(file.getText());
+                    String[][] quiz = Student.readQuizFile(file1);
+                    for (int i = 0; i < quiz.length; i++) {
+                        if (quiz[i][0] != null) {
+                            quizContent.setText(quizContent.getText()+ quiz[i][0] + "\n");
+                        }
+                        if (quiz[i][1] != null) {
+                            quizContent.setText(quizContent.getText()+ quiz[i][1] + "\n\n");
                         }
                     }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null,
+                            "Invalid file path name", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                tempQ[randChoice][0] = "";
-                tempQ[randChoice][1] = "";
-                count++;
+                System.out.println(quizContent.getText());
             }
-            if (count == quiz.length) {
-                returnStr = writeAnsToFile(quiz, recordAns, addToAns, name);
-                break;
+        });
+        takeQuiz.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frameAccount.setVisible(false);
+                frameQuiz.setVisible(true);
+                try {
+                    String serverStuff = Student.takeQuiz(Student.readQuizFile(new File(file.getText())), file.getText());
+                    Client.sendStuffToTheServer("ServerFile.txt",serverStuff);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                //quizContent.setText(student.runStudent("takeQuiz", file.getText()));
+                submit2.setVisible(true);
             }
-        }
-        return returnStr;
+        });
+        submit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frameAccount.setVisible(true);
+                frameQuiz.setVisible(false);
+
+            }
+        });
+        submit2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frameAccount.setVisible(false);
+                frameMenu.setVisible(false);
+                frameQuiz.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Thank you for using the program!");
+
+
+            }
+        });
+        frameAccount.setSize(300, 180);
+        frameAccount.setLocationRelativeTo(null);
+        frameAccount.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frameQuiz.setSize(300, 180);
+        frameQuiz.setLocationRelativeTo(null);
+        frameQuiz.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frameAccount.setVisible(true);
     }
 
-    /**
-     * Method that runs student methods based on the answer to the prompts the user
-     *
-     * @throws IOException
-     */
-    public static String runStudent(String studentChoiceS, String fileName) throws IOException {
-        String returnStr = "";
-        Scanner scanner = new Scanner(System.in);
-        int studentChoice = -1;
-        boolean run = true;
-        String again = "";
-        String quit = "";
+
+    public void setStudent(String username, String password, boolean isTeacher) {
+        student = new Student(username, password, false);
+
+    }
+
+    public StudentGUI() {
+
+    }
 
 
-        try {
-            if (studentChoiceS.equals("takeQuiz")) {
-                studentChoice = 1;
-            } else if (studentChoiceS.equals("viewQuiz")) {
-                studentChoice = 2;
-            }
+    public static void runStudentGUI() {
+        SwingUtilities.invokeLater(new StudentGUI());
+    }
 
-        } catch (NumberFormatException e) {
-            returnStr = ("Please enter a valid input.");
-        }
-
-
-        try {
-            switch (studentChoice) {
-                case 1:
-                    File quizTake = new File(fileName);
-                    String[][] currQuizT = readQuizFile(quizTake);
-                    returnStr = takeQuiz(currQuizT, fileName);
-                    break;
-                case 2:
-                    File quizGrade = new File(fileName);
-                    String[][] currQuizG = readQuizFile(quizGrade);
-                    returnStr= printQuiz(currQuizG, true);
-                    break;
-            }
-        } catch (FileNotFoundException e) {
-            returnStr = "Error, not a valid file";
-        }
-        return returnStr;
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new StudentGUI());
     }
 
 }
