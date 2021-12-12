@@ -1,3 +1,4 @@
+package com.company;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -83,9 +84,9 @@ public class ThreadedServer extends Thread{
                     String filepath = reader.readLine();
                     String message = reader.readLine();
                     //Writes those contents to a given file, unless the message is blank
-                    if (!message.equals("")) {
+                    if(!message.equals("") && !message.equals("*")) {
                         writeToFile(filepath, message);
-                    } else {
+                    } else if (message.equals("")) {
                         clearFile(filepath);
                     }
                     //Sends that file with the updated info back to the client
@@ -102,7 +103,7 @@ public class ThreadedServer extends Thread{
 
     /**
      * @param filename .txt name of file to be read from
-     * @return a string with ','s between lines of file
+     * @return a string with '~'s between lines of file
      */
     public static String readFile(String filename){
         String rtn = "";
@@ -110,7 +111,7 @@ public class ThreadedServer extends Thread{
             BufferedReader br = new BufferedReader(new FileReader(filename));
             String readIn;
             while ((readIn = br.readLine()) != null) {
-                rtn += readIn + ",";
+                rtn += readIn + "~";
             }
         } catch (Exception e){
             System.out.println("You didn't put in a correct filepath");

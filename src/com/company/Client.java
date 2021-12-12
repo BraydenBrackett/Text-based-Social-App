@@ -121,7 +121,7 @@ public class Client {
             Client.sendToServer(filename, contents);
             Client.readResponseAndWriteItToAFile(filename);
         } catch (Exception s){
-            System.out.println("Sending and returning from server");
+            System.out.println("Error sending and returning from server");
         }
     }
 
