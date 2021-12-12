@@ -89,7 +89,7 @@ public class ThreadedServer extends Thread{
             BufferedReader br = new BufferedReader(new FileReader(filename));
             String readIn;
             while ((readIn = br.readLine()) != null) {
-                rtn += readIn + ",";
+                rtn += readIn + "~";
             }
         } catch (Exception e){
             System.out.println("You didn't put in a correct filepath");

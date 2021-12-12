@@ -65,11 +65,7 @@ public class Client {
         }
         //PROMPTS USER FOR STRING
         if (run == true) {
-            /**
-             * TODO: DO YOUR THINGY HERE THAT MAKES THE PROGRAM MOVE ON FROM THIS LINE WHEN THIS METHOD IS DONE RUNNING
-             * */
-            //Login.main(null);
-            TeacherGUI.runTeacherGUI();
+            Login.main(null);
         }
         //HANDLES ANY CONNECTION ERRORS AND CLOSES THE CLIENT
         if (run == false) {
@@ -106,7 +102,7 @@ public class Client {
     public static void readResponseAndWriteItToAFile(String filename){
         try{
             String s1 = reader.readLine();
-            String[] lines = s1.split(",");
+            String[] lines = s1.split("~");
             FileWriter fileWriter = new FileWriter("new" + filename);
             for(int i = 0; i < lines.length; i++){
                 fileWriter.write(lines[i] + "\n");
