@@ -1,3 +1,4 @@
+package com.company;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -529,8 +530,6 @@ public class Login extends JComponent implements Runnable{
     public static String addAccountToFile(Account account) {
         try {
             FileWriter fileWriter = new FileWriter(filepath, true);
-            fileWriter.write(account.getUsername() + ","
-                    + account.getPassword() + "," + account.isTeacher() + "\n");
             fileWriter.close();
             return "Username:" + account.getUsername() + "," +
                     "Password:" + account.getPassword() + "," +
@@ -545,21 +544,9 @@ public class Login extends JComponent implements Runnable{
     }
 
     public static void addAccountsToFile(ArrayList<Account> accounts) {
-        try {
-            FileWriter fw = new FileWriter("Accounts.txt", false);
-            String write = "";
-            for (int i = 0; i < accounts.size(); i++) {
-                write += accounts.get(i).getUsername() + ","
-                        + accounts.get(i).getPassword() + "," + accounts.get(i).isTeacher() + "\n";
-            }
-            fw.write(write);
-            fw.flush();
-            fw.close();
-
-        } catch (Exception e) {
-
-            System.out.println("File does not exist.");
-
+        Client.sendStuffToTheServer("Accounts.txt","");
+        for(Account account: accounts){
+            //Client.sendStuffToTheServer("Accounts.txt", addAccountToFile(account));
         }
     }
 

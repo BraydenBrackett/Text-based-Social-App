@@ -27,9 +27,6 @@ public class Client {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        /**
-         * TODO: Figure out port and hostname stuff...is it automatic/should there be multiple ports...
-         */
 
         boolean run = true; //boolean for whether the client should be running
 
