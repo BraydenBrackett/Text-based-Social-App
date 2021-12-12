@@ -1,4 +1,3 @@
-package com.company;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -304,6 +303,8 @@ public class Login extends JComponent implements Runnable{
             public void actionPerformed(ActionEvent e) {
                 frameAccount.setVisible(false);
                 teacherYN = "y";
+                System.out.println(teacherYN);
+                TeacherGUI.runTeacherGUI();
             }
         });
         student.addActionListener(new ActionListener() {
@@ -488,16 +489,21 @@ public class Login extends JComponent implements Runnable{
      * @param account - account to be stored to file
      * @Important each account is on its own line in the format: username,password,isTeacher
      */
-    public static void addAccountToFile(Account account) {
+    public static String addAccountToFile(Account account) {
         try {
             FileWriter fileWriter = new FileWriter(filepath, true);
             fileWriter.write(account.getUsername() + ","
                     + account.getPassword() + "," + account.isTeacher() + "\n");
             fileWriter.close();
+            return "Username:" + account.getUsername() + "," +
+                    "Password:" + account.getPassword() + "," +
+                    "Is teacher:" + account.isTeacher() + "\n";
         } catch (IOException e) {
             System.out.println("Given filepath is invalid, please try again...");
+            return "";
         } catch (Exception e) {
             System.out.println("Error writing to file...");
+            return "";
         }
     }
 
@@ -586,7 +592,7 @@ public class Login extends JComponent implements Runnable{
             psswrd = password.getText();
 
             String isTeacher = teacherYN;
-
+            System.out.println(isTeacher);
 
             if (isTeacher.equals("") || usrnme.equals("") || psswrd.equals("")) {
                 JOptionPane.showMessageDialog(null,credentialsError);
@@ -599,7 +605,7 @@ public class Login extends JComponent implements Runnable{
                 isTeacherFlag = isTeacher.toLowerCase().equals("y");
                 if (!doesAccountExist(usrnme, psswrd, isTeacherFlag)) {
                     loggedInAccount = createNewAccount(usrnme, psswrd, isTeacherFlag);
-                    addAccountToFile(loggedInAccount);
+                    Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(loggedInAccount));
                     if (isTeacherFlag) {
                         teacher = new Teacher(usrnme, psswrd, true);
                     }
@@ -608,6 +614,7 @@ public class Login extends JComponent implements Runnable{
         }
 
         if (isTeacherFlag) {
+            System.out.println("Running...");
             TeacherGUI.runTeacherGUI();
         } else {
             StudentGUI.runStudentGUI();
