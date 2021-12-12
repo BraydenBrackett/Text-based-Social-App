@@ -328,7 +328,7 @@ public class Login extends JComponent implements Runnable{
                 }
                 if (!doesAccountExist(us, pw, true)) {
                     Account acc = createNewAccount(us, pw, true);
-                    //Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(acc));
+                    addAccountToFile(acc);
                 }
                 frameEditDel.setVisible(true);
             }
@@ -348,7 +348,7 @@ public class Login extends JComponent implements Runnable{
                 }
                 if (!doesAccountExist(us, pw, false)) {
                     Account acc = createNewAccount(us, pw, false);
-                    //Client.sendStuffToTheServer("Accounts.txt",addAccountToFile(acc));
+                    addAccountToFile(acc);
                 }
 
 
@@ -372,7 +372,7 @@ public class Login extends JComponent implements Runnable{
         done.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //editAccount(username.getText(), us.getText(),pw.getText());
+                editAccount(username.getText(), us.getText(),pw.getText());
                 frameEdit.setVisible(false);
                 us.setText("");
                 pw.setText("");
@@ -382,7 +382,7 @@ public class Login extends JComponent implements Runnable{
 
         deleteAcc.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //deleteAccount(username1.getText());
+                deleteAccount(username1.getText());
                 //frameEdit.setVisible(true);
                 frameLogin.setVisible(false);
                 frameRegister.setVisible(false);
@@ -539,26 +539,16 @@ public class Login extends JComponent implements Runnable{
      * @param account - account to be stored to file
      * @Important each account is on its own line in the format: username,password,isTeacher
      */
-    public static String addAccountToFile(Account account) {
-        try {
-            FileWriter fileWriter = new FileWriter(filepath, true);
-            fileWriter.close();
-            return account.getUsername() + "," +
+    public static void addAccountToFile(Account account) {
+            Client.sendStuffToTheServer("Accounts.txt", account.getUsername() + "," +
                     account.getPassword() + "," +
-                    account.isTeacher() + "\n";
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null,"Given filepath is invalid, please try again...");
-            return "";
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"Error writing to file...");
-            return "";
-        }
+                    account.isTeacher() + "\n");
     }
 
     public static void addAccountsToFile(ArrayList<Account> accounts) {
-        //Client.sendStuffToServer("Accounts.txt","");
+        Client.sendStuffToServer("Accounts.txt","");
         for(Account account: accounts){
-           // Client.sentStuffToServer("Accounts.txt", addAccountToFile(account));
+            addAccountToFile(account);
         }
     }
 
@@ -594,13 +584,15 @@ public class Login extends JComponent implements Runnable{
      */
     public static ArrayList<Account> readInAccounts() {
         ArrayList<Account> accounts = new ArrayList<>();
+        boolean isTeacher = false;
         try {
-            String line;
-            boolean isTeacher;
-            BufferedReader br = new BufferedReader(new FileReader(filepath));
-            while ((line = br.readLine()) != null) {
-                if (!line.equals("")) {
-                    String[] accountDetails = line.split(",");
+            String line = "";
+            line = Client.sendStuffToTheClient("*");
+            //BufferedReader br = new BufferedReader(new FileReader(filepath));
+            String[] arr = line.split("\n");
+            for(int i = 0;i<arr.length;i++){
+                if (!arr[i].equals("")) {
+                    String[] accountDetails = arr[i].split(",");
                     isTeacher = accountDetails[2].equals("true");
                     accounts.add(createNewAccount(accountDetails[0], accountDetails[1], isTeacher));
                 }
