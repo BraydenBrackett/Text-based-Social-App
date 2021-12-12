@@ -289,6 +289,17 @@ public class Login extends JComponent implements Runnable{
                 frameEditDel.setVisible(true);
             }
         });
+        submit2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String un = username.getText();
+                String pw = password.getText();
+                //System.out.println(un);
+                //System.out.println(pw);
+                frameRegister.setVisible(false);
+                //frameAccount.setVisible(true);
+                frameEditDel.setVisible(true);
+            }
+        });
         registerHere.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 registerFrame();
