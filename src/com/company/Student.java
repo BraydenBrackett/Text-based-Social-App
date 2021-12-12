@@ -1,4 +1,5 @@
-package com.company;
+
+import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -68,17 +69,20 @@ public class Student extends Account {
      */
     public static String printQuiz(String[][] quiz, boolean graded) {
         String quizStr = "";
+        int questionNum = 1;
         if (!graded) {
             for (int i = 0; i < quiz.length; i++) {
                 for (int k = 0; k < 1; k++) {
-                    quizStr += (quiz[i][k]) + "\n";
+                    quizStr += questionNum + "."+ (quiz[i][k]) + "\n";
+                    questionNum++;
                 }
             }
         } else {
             for (int i = 0; i < quiz.length; i++) {
                 for (int k = 0; k < 2; k++) {
                     if (quiz[i][k] != null) {
-                        quizStr += (quiz[i][k]) + "\n";
+                        quizStr += questionNum + "."+ (quiz[i][k]) + "\n";
+                        questionNum++;
                     }
                 }
             }
@@ -95,23 +99,28 @@ public class Student extends Account {
      * @param name
      * @throws IOException
      */
-    public static void writeAnsToFile(String[][] quiz, String[] ans,
+    public static String writeAnsToFile(String[][] quiz, String[] ans,
                                       String[] studentF, String name) throws IOException {
+        String returnStr = "";
         File tempF = new File(name + "-taken");
         PrintWriter pw = new PrintWriter(new FileOutputStream(tempF));
         for (int i = 0; i < quiz.length; i++) {
             pw.write(quiz[i][0]);
+            returnStr += quiz[i][0] + "\n";
             pw.println();
             pw.flush();
             pw.write(quiz[i][1]);
+            returnStr += quiz[i][1] + "\n";
             pw.println();
             pw.flush();
             if (studentF[i] != null) {
                 pw.write(ans[i] + " " + studentF[i]);
+                returnStr += ans[i] + " " + studentF[i] + "\n";
                 pw.println();
                 pw.flush();
             } else {
                 pw.write(ans[i]);
+                returnStr += ans[i] + "\n";
                 pw.println();
                 pw.flush();
             }
@@ -119,7 +128,9 @@ public class Student extends Account {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         pw.write(format.format(now));
+        returnStr += format.format(now);
         pw.flush();
+        return returnStr;
     }
 
     /**
@@ -148,21 +159,20 @@ public class Student extends Account {
         while (true) {
             randChoice = (int) ((Math.random() * quiz.length));
             if (!tempQ[randChoice][0].isEmpty()) {
-                System.out.println(tempQ[randChoice][0]);
-                System.out.println(tempQ[randChoice][1]);
-                ans = scanner.nextLine();
+                JOptionPane.showMessageDialog(null,(tempQ[randChoice][0]));
+                JOptionPane.showMessageDialog(null,(tempQ[randChoice][1]));
+                ans = JOptionPane.showInputDialog(null,"Enter Answer:");
                 recordAns[randChoice] = ans;
-                returnStr+=("Would you like to add a file? yes/no")+"\n";
-                addF = scanner.nextLine().toLowerCase();
+                addF = JOptionPane.showInputDialog(null,"Would you like to add a file? yes/no").toLowerCase();
                 if (addF.equals("yes")) {
                     while (true) {
-                        returnStr+=("Please enter the path to the file.")+"\n";
-                        studentF = scanner.nextLine();
+                        //returnStr+=("Please enter the path to the file.")+"\n";
+                        studentF = JOptionPane.showInputDialog(null,"Please enter the path to the file.");
                         if (Files.exists(Paths.get(studentF))) {
                             addToAns[count] = studentF;
                             break;
                         } else {
-                            returnStr+=("Error, not a valid file path")+"\n";
+                            JOptionPane.showMessageDialog(null,"Error, not a valid file path");
                         }
                     }
                 }
@@ -171,7 +181,7 @@ public class Student extends Account {
                 count++;
             }
             if (count == quiz.length) {
-                writeAnsToFile(quiz, recordAns, addToAns, name);
+                returnStr = writeAnsToFile(quiz, recordAns, addToAns, name);
                 break;
             }
         }
