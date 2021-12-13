@@ -1,4 +1,5 @@
 package com.company;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -10,7 +11,7 @@ import java.util.Scanner;
 /**
  * Login
  * <p>
- Handles:
+ * Handles:
  * -Logging into accounts
  * -Managing file that keeps list of accounts
  * -Account interface upon logging into the project
@@ -18,7 +19,7 @@ import java.util.Scanner;
  * @author Harshini Musku and Brandon Kingma, L12
  * @version December 13 2021
  */
-public class Login extends JComponent implements Runnable{
+public class Login extends JComponent implements Runnable {
     /**
      * FOR THE PERSON WHO WRITES THE MAIN PROGRAM - enter in the path to the .txt file that stores the accounts;
      */
@@ -208,7 +209,6 @@ public class Login extends JComponent implements Runnable{
         contentRegister.add(panelUN1, BorderLayout.CENTER);
 
 
-
         password = new JTextField(10);
         panelUN.add(password);
         //contentLogin.add(panelUN1, BorderLayout.WEST);
@@ -307,11 +307,11 @@ public class Login extends JComponent implements Runnable{
                 teacherYN = "y";
                 //System.out.println(teacherYN);
                 String us = username.getText();
-                if(us.equals("")){
+                if (us.equals("")) {
                     us = username1.getText();
                 }
                 String pw = password.getText();
-                if(us.equals("")){
+                if (us.equals("")) {
                     pw = password1.getText();
                 }
                 if (!doesAccountExist(us, pw, true)) {
@@ -327,11 +327,11 @@ public class Login extends JComponent implements Runnable{
                 frameAccount.setVisible(false);
                 teacherYN = "n";
                 String us = username.getText();
-                if(us.equals("")){
+                if (us.equals("")) {
                     us = username1.getText();
                 }
                 String pw = password.getText();
-                if(us.equals("")){
+                if (us.equals("")) {
                     pw = password1.getText();
                 }
                 if (!doesAccountExist(us, pw, false)) {
@@ -360,7 +360,7 @@ public class Login extends JComponent implements Runnable{
         done.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                editAccount(username.getText(), us.getText(),pw.getText());
+                editAccount(username.getText(), us.getText(), pw.getText());
                 frameEdit.setVisible(false);
                 us.setText("");
                 pw.setText("");
@@ -383,18 +383,19 @@ public class Login extends JComponent implements Runnable{
                 //frameAccount.setVisible(true);
                 frameEditDel.setVisible(false);
                 //System.out.println("teacher is:" + teacherYN);
-                if(teacherYN.equals("y")){
+                if (teacherYN.equals("y")) {
                     isTeacher = 1;
                     //TeacherGUI.runTeacherGUI();
-                } else{
+                } else {
                     isTeacher = 0;
                     //StudentGUI.runStudentGUI();
                 }
             }
         });
     }
+
     /**
-     * Makes the login frame visible and clears the username + password textfields 
+     * Makes the login frame visible and clears the username + password textfields
      */
     public void loginFrame() {
         frameLogin.setVisible(true);
@@ -403,8 +404,9 @@ public class Login extends JComponent implements Runnable{
         username.setText("");
         password.setText("");
     }
+
     /**
-     * Makes the register frame visible and clears the username + password textfields 
+     * Makes the register frame visible and clears the username + password textfields
      */
     public void registerFrame() {
         frameLogin.setVisible(false);
@@ -415,9 +417,8 @@ public class Login extends JComponent implements Runnable{
     }
 
     protected void paintComponent(Graphics g) {
-       
-    }
 
+    }
 
 
     public void draw(int size) {
@@ -426,8 +427,9 @@ public class Login extends JComponent implements Runnable{
 
     public Login() {
     }
+
     /**
-     * method used to login users 
+     * method used to login users
      */
     public void runAccountLoginProcess() {
         Scanner scanner = new Scanner(System.in);
@@ -436,18 +438,18 @@ public class Login extends JComponent implements Runnable{
 
         //System.out.println(welcome);
         while (runLoginProcess) {
-            String usernme =username.getText() ;
+            String usernme = username.getText();
 
             String psswrd = password.getText();
 
             //System.out.println(teacherPrompt);
             String isTeacher = scanner.nextLine();
             if (isTeacher.equals("") || usernme.equals("") || psswrd.equals("")) {
-                JOptionPane.showMessageDialog(null,credentialsError);
+                JOptionPane.showMessageDialog(null, credentialsError);
             } else if (!isTeacher.toLowerCase().equals("y") && !isTeacher.toLowerCase().equals("n")) {
-                JOptionPane.showMessageDialog(null,credentialsError);
+                JOptionPane.showMessageDialog(null, credentialsError);
             } else if (usernme.contains(",") || usernme.contains(",")) {
-                JOptionPane.showMessageDialog(null,credentialsError);
+                JOptionPane.showMessageDialog(null, credentialsError);
             } else {
                 runLoginProcess = false;
                 boolean isTeacherFlag = isTeacher.toLowerCase().equals("y");
@@ -487,10 +489,11 @@ public class Login extends JComponent implements Runnable{
         }
         addAccountsToFile(accounts);
     }
-     /**
+
+    /**
      * deletes an account based on passed parameters and adds account to
      *
-     * @param tempAcc  -  old username
+     * @param tempAcc -  old username
      */
     public static void deleteAccount(String tempAcc) {
         Client.sendStuffToTheServer("Accounts", "*");
@@ -523,18 +526,19 @@ public class Login extends JComponent implements Runnable{
      * @Important each account is on its own line in the format: username,password,isTeacher
      */
     public static void addAccountToFile(Account account) {
-            Client.sendStuffToTheServer("Accounts", account.getUsername() + "," +
-                    account.getPassword() + "," +
-                    account.isTeacher() + "\n");
+        Client.sendStuffToTheServer("Accounts", account.getUsername() + "," +
+                account.getPassword() + "," +
+                account.isTeacher() + "\n");
     }
+
     /**
      * adds all the accounts to the server
      *
-     * @param arraylist of all the accounts
+     * @param Arraylist of all the accounts
      */
     public static void addAccountsToFile(ArrayList<Account> accounts) {
-        Client.sendStuffToTheServer("Accounts","");
-        for(Account account: accounts){
+        Client.sendStuffToTheServer("Accounts", "");
+        for (Account account : accounts) {
             addAccountToFile(account);
         }
     }
@@ -587,6 +591,7 @@ public class Login extends JComponent implements Runnable{
 
         return accounts;
     }
+
     /**
      * Logs in a user and displays an errors on JOptionPance
      */
@@ -609,11 +614,11 @@ public class Login extends JComponent implements Runnable{
             //System.out.println(isTeacher);
 
             if (isTeacher.equals("") || usrnme.equals("") || psswrd.equals("")) {
-                JOptionPane.showMessageDialog(null,credentialsError);
+                JOptionPane.showMessageDialog(null, credentialsError);
             } else if (!isTeacher.toLowerCase().equals("y") && !isTeacher.toLowerCase().equals("n")) {
-                JOptionPane.showMessageDialog(null,credentialsError);
+                JOptionPane.showMessageDialog(null, credentialsError);
             } else if (psswrd.contains(",") || usrnme.contains(",")) {
-                JOptionPane.showMessageDialog(null,credentialsError);
+                JOptionPane.showMessageDialog(null, credentialsError);
             } else {
                 runLoginProcess = false;
                 isTeacherFlag = isTeacher.toLowerCase().equals("y");
@@ -627,12 +632,13 @@ public class Login extends JComponent implements Runnable{
             }
         }
     }
+
     /**
      * runs the GUI of Login interface
      */
     public static int runLogin() throws IOException {
         SwingUtilities.invokeLater(new Login());
-        while(isTeacher == 3){
+        while (isTeacher == 3) {
             System.out.println("");
         }
         return isTeacher;
