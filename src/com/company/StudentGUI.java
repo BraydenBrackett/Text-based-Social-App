@@ -134,7 +134,7 @@ public class StudentGUI implements Runnable {
                     JOptionPane.showMessageDialog(null,
                             "Invalid file path name", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                System.out.println(quizContent.getText());
+                //System.out.println(quizContent.getText());
             }
         });
         takeQuiz.addActionListener(new ActionListener() {

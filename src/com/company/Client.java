@@ -62,7 +62,14 @@ public class Client {
         }
         //PROMPTS USER FOR STRING
         if (run == true) {
-            Login.main(null);
+            int rtn = Login.runLogin();
+            if(rtn  != 3){
+                if(rtn == 1){
+                    TeacherGUI.runTeacherGUI();
+                } else {
+                    StudentGUI.runStudentGUI();
+                }
+            }
         }
         //HANDLES ANY CONNECTION ERRORS AND CLOSES THE CLIENT
         if (run == false) {
@@ -106,7 +113,6 @@ public class Client {
             }
             fileWriter.close();
         } catch (Exception e){
-            System.out.println("Error reading to and creating a new file");
         }
     }
 
@@ -121,7 +127,6 @@ public class Client {
             Client.sendToServer(filename, contents);
             Client.readResponseAndWriteItToAFile(filename);
         } catch (Exception s){
-            System.out.println("Error sending and returning from server");
         }
     }
 

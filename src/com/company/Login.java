@@ -55,6 +55,8 @@ public class Login extends JComponent implements Runnable{
     JLabel unLabel1;
     JLabel pwLabel1;
 
+    public static int isTeacher = 3;
+
 
     static JTextField username; // text field for username
     static JTextField password; // text field for password
@@ -396,9 +398,11 @@ public class Login extends JComponent implements Runnable{
                 frameEditDel.setVisible(false);
                 //System.out.println("teacher is:" + teacherYN);
                 if(teacherYN.equals("y")){
-                    TeacherGUI.runTeacherGUI();
+                    isTeacher = 1;
+                    //TeacherGUI.runTeacherGUI();
                 } else{
-                    StudentGUI.runStudentGUI();
+                    isTeacher = 0;
+                    //StudentGUI.runStudentGUI();
                 }
             }
         });
@@ -498,9 +502,8 @@ public class Login extends JComponent implements Runnable{
      * @return returns a new account of given parameters
      */
     public static void editAccount(String username, String password, String tempAcc) {
-
+        Client.sendStuffToTheServer("Accounts", "*");
         ArrayList<Account> accounts = readInAccounts();
-        //System.out.println(accounts.size());
         for (int i = 0; i < accounts.size(); i++) {
             if (accounts.get(i).getUsername().equals(tempAcc)) {
                 accounts.get(i).setUsername(username);
@@ -511,6 +514,7 @@ public class Login extends JComponent implements Runnable{
     }
 
     public static void deleteAccount(String tempAcc) {
+        Client.sendStuffToTheServer("Accounts", "*");
         ArrayList<Account> accounts = readInAccounts();
         for (int i = 0; i < accounts.size(); i++) {
             if (accounts.get(i).getUsername().equals(tempAcc)) {
@@ -540,13 +544,13 @@ public class Login extends JComponent implements Runnable{
      * @Important each account is on its own line in the format: username,password,isTeacher
      */
     public static void addAccountToFile(Account account) {
-            Client.sendStuffToTheServer("Accounts.txt", account.getUsername() + "," +
+            Client.sendStuffToTheServer("Accounts", account.getUsername() + "," +
                     account.getPassword() + "," +
                     account.isTeacher() + "\n");
     }
 
     public static void addAccountsToFile(ArrayList<Account> accounts) {
-        Client.sendStuffToServer("Accounts.txt","");
+        Client.sendStuffToTheServer("Accounts","");
         for(Account account: accounts){
             addAccountToFile(account);
         }
@@ -584,21 +588,18 @@ public class Login extends JComponent implements Runnable{
      */
     public static ArrayList<Account> readInAccounts() {
         ArrayList<Account> accounts = new ArrayList<>();
-        boolean isTeacher = false;
         try {
-            String line = "";
-            line = Client.sendStuffToTheClient("*");
-            //BufferedReader br = new BufferedReader(new FileReader(filepath));
-            String[] arr = line.split("\n");
-            for(int i = 0;i<arr.length;i++){
-                if (!arr[i].equals("")) {
-                    String[] accountDetails = arr[i].split(",");
+            boolean isTeacher;
+            BufferedReader br = new BufferedReader(new FileReader("newAccounts"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (!line.equals("")) {
+                    String[] accountDetails = line.split(",");
                     isTeacher = accountDetails[2].equals("true");
                     accounts.add(createNewAccount(accountDetails[0], accountDetails[1], isTeacher));
                 }
             }
         } catch (Exception e) {
-            System.out.println("There was an error reading in the accounts...");
             return null;
         }
 
@@ -640,18 +641,12 @@ public class Login extends JComponent implements Runnable{
                 }
             }
         }
-
-        if (isTeacherFlag) {
-            //System.out.println("Running...");
-            TeacherGUI.runTeacherGUI();
-        } else {
-            //System.out.println("Student Running...");
-
-            //StudentGUI.runStudentGUI();
-        }
     }
-    public static void main(String[] args) throws IOException {
+    public static int runLogin() throws IOException {
         SwingUtilities.invokeLater(new Login());
-
+        while(isTeacher == 3){
+            System.out.println("");
+        }
+        return isTeacher;
     }
 }

@@ -114,7 +114,6 @@ public class ThreadedServer extends Thread{
                 rtn += readIn + "~";
             }
         } catch (Exception e){
-            System.out.println("You didn't put in a correct filepath");
         }
         return rtn;
     }
@@ -129,7 +128,7 @@ public class ThreadedServer extends Thread{
             fileWriter.write(contents + "\n");
             fileWriter.close();
         } catch (Exception e){
-            System.out.println("You didn't put in a correct filepath");
+
         }
     }
 
@@ -142,7 +141,7 @@ public class ThreadedServer extends Thread{
             fileWriter.write("");
             fileWriter.close();
         } catch (Exception e){
-            System.out.println("You didn't put in a correct filepath");
+
         }
     }
 }
