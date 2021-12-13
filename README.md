@@ -7,6 +7,7 @@
 - All Code and Subsequent Code Related Files - Erik 
 - Report - Harshini 
 - Presentation - Erik 
+- **PLEASE NOTE: WITH REGARDS TO THE COMMIT HISTORY:** James had a malfunction with his laptop and as such was unable to commit code to the git repo. He did however write code for several classes - mainly the servers - which was sent across other communication streams. Please take this into consideration...
 
 ## About Classes:
 ### Account 
