@@ -266,7 +266,7 @@ public class TeacherGUI extends Thread implements Runnable {
                             } else if (insideCount == 5) {
                                 mc4 = createEnterText.getText();
                                 createEnterText.setText("");
-                                readQuiz.addQuestion(new MCQuestion(input, mc1, mc2, mc3, mc4));
+                               // readQuiz.addQuestion(new MCQuestion(input, mc1, mc2, mc3, mc4));
                                 Client.sendStuffToTheServer(name, "MC: " + input);
                                 Client.sendStuffToTheServer(name, String.format("A: %s B: %s C: %s D: %s", mc1, mc2, mc3, mc4));
                                 Client.sendStuffToTheServer(name, " ");
@@ -296,7 +296,7 @@ public class TeacherGUI extends Thread implements Runnable {
                                 createEnterText.setText("");
                             } else if (insideCount == 1) {
                                 input = createEnterText.getText();
-                                readQuiz.addQuestion(new FRQQuestion(input));
+                                //readQuiz.addQuestion(new FRQQuestion(input));
                                 Client.sendStuffToTheServer(name, "FRQ: " + input);
                                 Client.sendStuffToTheServer(name, "Answer: ");
                                 Client.sendStuffToTheServer(name, " ");
@@ -327,7 +327,7 @@ public class TeacherGUI extends Thread implements Runnable {
                                 createEnterText.setText("");
                             } else if (insideCount == 1) {
                                 input = createEnterText.getText();
-                                readQuiz.addQuestion(new FillInBlankQuestion(input));
+                                //readQuiz.addQuestion(new FillInBlankQuestion(input));
                                 Client.sendStuffToTheServer(name, "Fill in the blank: " + input);
                                 Client.sendStuffToTheServer(name, "Answer: _________");
                                 Client.sendStuffToTheServer(name, " ");
@@ -383,10 +383,11 @@ public class TeacherGUI extends Thread implements Runnable {
                     createEnterText.setText("");
                     try {
 
-                        //File file = new File("new" + input);
+                        File file = new File("new" + input);
                         Client.sendStuffToTheServer(input, name);
-                        //file.delete();
-                        //quizTemp.delete();
+                        //Thread.sleep(100);
+                        file.delete();
+                        quizTemp.delete();
                         createQuizArea.setText("Please press return to go back to the teacher menu.");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null,
