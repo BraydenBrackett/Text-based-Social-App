@@ -5,7 +5,7 @@
 3. Run as many other Client.java classes as you'd like as long as you're using the green arrow or fully compliling the project
 ## Who Submitted Which Part:
 - All Code and Subsequent Code Related Files - TODO AT TUESDAY'S MEETING 
-- Report - Brayden 
+- Report - Harshini 
 - Presentation - Erik 
 
 ## About Classes:
