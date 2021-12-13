@@ -4,12 +4,11 @@
 2. Run the Client.java class using the green arrow
 3. Run as many other Client.java classes as you'd like as long as you're using the green arrow or fully compliling the project
 ## Who Submitted Which Part:
-- All Code and Subsequent Code Related Files - TODO AT TUESDAY'S MEETING 
+- All Code and Subsequent Code Related Files - Erik 
 - Report - Harshini 
 - Presentation - Erik 
 
 ## About Classes:
-### TODO AT TUESDAY'S MEETING - CHECK FOR OTHER CLASSES AND WRITE THEM DOWN
 ### Account 
 - Is the base class for an account object. An account within the program is an object that is comprised of a username, password, and a flag for whether that account is a teacher or student.
 - The account class is a very simple object class comprised of getters and setters alongside a basic constructor.
