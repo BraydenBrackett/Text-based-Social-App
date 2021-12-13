@@ -5,8 +5,19 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.Buffer;
 import java.util.ArrayList;
+
+/**
+ * TeacherGUI
+ * <p>
+ * Creates the GUI interface for the teacher account with the use
+ * of teacher methods and quiz class
+ *
+ * @author Brandon Kingma, L12
+ * @version December 12, 2021
+ */
 
 public class TeacherGUI extends Thread implements Runnable {
     //Return value variable
@@ -255,8 +266,7 @@ public class TeacherGUI extends Thread implements Runnable {
                             } else if (insideCount == 5) {
                                 mc4 = createEnterText.getText();
                                 createEnterText.setText("");
-                                //MCQ is not needed now
-                                //readQuiz.addQuestion(new MCQuestion(input, mc1, mc2, mc3, mc4));
+                                readQuiz.addQuestion(new MCQuestion(input, mc1, mc2, mc3, mc4));
                                 Client.sendStuffToTheServer(name, "MC: " + input);
                                 Client.sendStuffToTheServer(name, String.format("A: %s B: %s C: %s D: %s", mc1, mc2, mc3, mc4));
                                 Client.sendStuffToTheServer(name, " ");
@@ -286,8 +296,7 @@ public class TeacherGUI extends Thread implements Runnable {
                                 createEnterText.setText("");
                             } else if (insideCount == 1) {
                                 input = createEnterText.getText();
-                                //FRQ not needed now
-                                //readQuiz.addQuestion(new FRQQuestion(input));
+                                readQuiz.addQuestion(new FRQQuestion(input));
                                 Client.sendStuffToTheServer(name, "FRQ: " + input);
                                 Client.sendStuffToTheServer(name, "Answer: ");
                                 Client.sendStuffToTheServer(name, " ");
@@ -318,8 +327,7 @@ public class TeacherGUI extends Thread implements Runnable {
                                 createEnterText.setText("");
                             } else if (insideCount == 1) {
                                 input = createEnterText.getText();
-                                //FIB not needed now
-                                //readQuiz.addQuestion(new FillInBlankQuestion(input));
+                                readQuiz.addQuestion(new FillInBlankQuestion(input));
                                 Client.sendStuffToTheServer(name, "Fill in the blank: " + input);
                                 Client.sendStuffToTheServer(name, "Answer: _________");
                                 Client.sendStuffToTheServer(name, " ");
@@ -357,8 +365,14 @@ public class TeacherGUI extends Thread implements Runnable {
                         createQuizArea.setText("Quiz randomized!" +
                                 "\nYou have successfully created the quiz!" +
                                 "\nPlease enter the course pathname you would like to add this quiz to.");
-                        Client.sendStuffToTheServer(name, "y");
-
+                        //Client.sendStuffToTheServer(name, "y");
+                        try {
+                            readQuiz.randomize();
+                        } catch (FileNotFoundException ex) {
+                            createQuizArea.setText("Error randomizing quiz" +
+                                    "\nYou have successfully created the quiz!" +
+                                    "\nPlease enter the course pathname you would like to add this quiz to.");
+                        }
                     } else {
                         createQuizArea.setText("The quiz was not randomized." +
                                 "\nYou have successfully created the quiz!" +
@@ -368,13 +382,11 @@ public class TeacherGUI extends Thread implements Runnable {
                     input = createEnterText.getText();
                     createEnterText.setText("");
                     try {
-                        //Don't need to add to course now
-                        //Teacher.addToCourse(new File(input), readQuiz.getQuizFileName());
 
-                        File file = new File("new" + input);
+                        //File file = new File("new" + input);
                         Client.sendStuffToTheServer(input, name);
-                        file.delete();
-                        quizTemp.delete();
+                        //file.delete();
+                        //quizTemp.delete();
                         createQuizArea.setText("Please press return to go back to the teacher menu.");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null,
