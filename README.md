@@ -51,6 +51,21 @@
 ### Client
 - The Client class sends data to the server and recieves data from the server to write a file
 - Client interacts with and sends and recieves data from the Login, TeacherGUI, and StudentGUI classes
+### Main
+- Used to test methods
+### ThreadedServer
+- Recieves String data from the Client and writes this data to a file
+- ClearFile method to avoid duplication
+- Interacts with the client class
+- Fully concurent
+### StudentGUI
+- GUI to run the Student class
+- gets data to send from client to server
+- fully concurent
+### TeacherGUI
+- GUI to run the Teacher class
+- gets data to send from client to server
+- fully concurent
 
 ## Who Did What:
 - Brayden - Server, Client, README, Documentation  
