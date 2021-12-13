@@ -111,7 +111,6 @@ public class StudentGUI implements Runnable {
                     String serverStuff = Student.takeQuiz(Student.readQuizFile(new File(file.getText())), file.getText());
                     Client.sendStuffToTheServer("ServerFile.txt", serverStuff);
                 } catch (IOException ex) {
-                    ex.printStackTrace();
                 }
                 submit2.setVisible(true);
             }
