@@ -48,6 +48,9 @@
 ### Course
 - The course class allows for the management of courses and the creation of courses. 
 - Due to the nature of the class, it mainly interacts with the login, teacher, and student classes. 
+### Client
+- The Client class sends data to the server and recieves data from the server to write a file
+- Client interacts with and sends and recieves data from the Login, TeacherGUI, and StudentGUI classes
 
 ## Who Did What:
 - Brayden - Server, Client, README, Documentation  
