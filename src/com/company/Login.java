@@ -8,26 +8,15 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * import java.io.*;
- * import java.util.ArrayList;
- * import java.util.Scanner;
+ * Login
  * <p>
- * /**
- * Class that handles account management and logging into accounts
- * <p>
- * Handles:
+ Handles:
  * -Logging into accounts
  * -Managing file that keeps list of accounts
  * -Account interface upon logging into the project
- */
-
-/**
- * Login
- * <p>
- * runs the min method
  *
  * @author Harshini Musku and Brandon Kingma, L12
- * @version November 14 2021
+ * @version December 13 2021
  */
 public class Login extends JComponent implements Runnable{
     /**
@@ -69,11 +58,6 @@ public class Login extends JComponent implements Runnable{
     JButton registerHere; // button to submit credentials
     JButton loginHere; // button to submit credentials
 
-    int curX; // current mouse x coordinate
-    int curY; // current mouse y coordinate
-    int oldX; // previous mouse x coordinate
-    int oldY; // previous mouse y coordinate
-
     Login loginGUI; // variable of the type Paint
     Color color;
     Color filledColor;
@@ -92,7 +76,7 @@ public class Login extends JComponent implements Runnable{
     JLabel accountLabel;
     JButton student;
     JButton teacher;
-    static String teacherYN;
+    static String teacherYN;//holds y/n based on if the account is a student or a teacher
 
     /**
      * Main runner method that should be called in main.
@@ -102,6 +86,7 @@ public class Login extends JComponent implements Runnable{
     public void run() {
 
         randGen = new Random();
+        //All the frames used in the login interface
         frameLogin = new JFrame("Login");
         frameRegister = new JFrame("Register");
         frameMenu = new JFrame("Menu");
@@ -125,7 +110,7 @@ public class Login extends JComponent implements Runnable{
         Container contentMenu = frameMenu.getContentPane();
         contentMenu.setLayout(new BorderLayout());
         contentMenu.add(loginGUI, BorderLayout.CENTER);
-
+        //GUI for creating all the buttons, lables, and textfields for the frames.
         JPanel panelPrompt = new JPanel();
         JPanel panelEditDel = new JPanel();
         editDelPrompt = new JLabel("Would you like to edit or delete your account?");
@@ -281,6 +266,7 @@ public class Login extends JComponent implements Runnable{
         frameAccount.setSize(300, 100);
         frameAccount.setLocationRelativeTo(null);
         frameAccount.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //action listeners to flow through the gui and run code as buttons are pressed.
         submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String un = username.getText();
@@ -407,7 +393,9 @@ public class Login extends JComponent implements Runnable{
             }
         });
     }
-
+    /**
+     * Makes the login frame visible and clears the username + password textfields 
+     */
     public void loginFrame() {
         frameLogin.setVisible(true);
         frameRegister.setVisible(false);
@@ -415,7 +403,9 @@ public class Login extends JComponent implements Runnable{
         username.setText("");
         password.setText("");
     }
-
+    /**
+     * Makes the register frame visible and clears the username + password textfields 
+     */
     public void registerFrame() {
         frameLogin.setVisible(false);
         frameRegister.setVisible(true);
@@ -425,23 +415,8 @@ public class Login extends JComponent implements Runnable{
     }
 
     protected void paintComponent(Graphics g) {
-        // if (image == null) {
-        //  image = createImage(getSize().width, getSize().height);
-
-        // this lets us draw on the image (ie. the canvas)
-        //graphics2D = (Graphics2D) image.getGraphics();
-
-        // gives us better rendering quality for the drawing lines
-        //  graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-        //  RenderingHints.VALUE_ANTIALIAS_ON);
-
-        // set canvas to white with default paint color
-        // graphics2D.setPaint(Color.white);
-        //graphics2D.fillRect(0, 0, getSize().width, getSize().height);
-        //graphics2D.setPaint(Color.black);
-        //repaint();
+       
     }
-    //g.drawImage(image, 0, 0, null);
 
 
 
@@ -451,7 +426,9 @@ public class Login extends JComponent implements Runnable{
 
     public Login() {
     }
-
+    /**
+     * method used to login users 
+     */
     public void runAccountLoginProcess() {
         Scanner scanner = new Scanner(System.in);
         boolean runLoginProcess = true;
@@ -493,13 +470,11 @@ public class Login extends JComponent implements Runnable{
     }
 
     /**
-     * Creates a new account based on passed parameters and adds account to
-     * file that stores all the accounts
+     * edits an account based on passed parameters and adds account to
      *
-     * @param password - password of user
-     * @param username - username of user
-     * @param tempAcc  -  username
-     * @return returns a new account of given parameters
+     * @param password - new password of user
+     * @param username - new username of user
+     * @param tempAcc  -  old username
      */
     public static void editAccount(String username, String password, String tempAcc) {
         Client.sendStuffToTheServer("Accounts", "*");
@@ -512,7 +487,11 @@ public class Login extends JComponent implements Runnable{
         }
         addAccountsToFile(accounts);
     }
-
+     /**
+     * deletes an account based on passed parameters and adds account to
+     *
+     * @param tempAcc  -  old username
+     */
     public static void deleteAccount(String tempAcc) {
         Client.sendStuffToTheServer("Accounts", "*");
         ArrayList<Account> accounts = readInAccounts();
@@ -548,7 +527,11 @@ public class Login extends JComponent implements Runnable{
                     account.getPassword() + "," +
                     account.isTeacher() + "\n");
     }
-
+    /**
+     * adds all the accounts to the server
+     *
+     * @param arraylist of all the accounts
+     */
     public static void addAccountsToFile(ArrayList<Account> accounts) {
         Client.sendStuffToTheServer("Accounts","");
         for(Account account: accounts){
@@ -557,8 +540,7 @@ public class Login extends JComponent implements Runnable{
     }
 
     /**
-     * Creates a new account based on passed parameters and adds account to
-     * file that stores all the accounts
+     * checks if the user account already exists.
      *
      * @param password  - password of user
      * @param username  - username of user
@@ -605,6 +587,9 @@ public class Login extends JComponent implements Runnable{
 
         return accounts;
     }
+    /**
+     * Logs in a user and displays an errors on JOptionPance
+     */
     public void login() throws IOException {
         Scanner scanner = new Scanner(System.in);
         boolean runLoginProcess = true;
@@ -642,6 +627,9 @@ public class Login extends JComponent implements Runnable{
             }
         }
     }
+    /**
+     * runs the GUI of Login interface
+     */
     public static int runLogin() throws IOException {
         SwingUtilities.invokeLater(new Login());
         while(isTeacher == 3){
