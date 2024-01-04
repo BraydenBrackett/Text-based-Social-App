@@ -1,4 +1,4 @@
-# CS180-Project_05
+# Text-based-Social-App
 ## Operation Instructions:
 1. Run the ThreadedServer.java class using the green arrow
 2. Run the Client.java class using the green arrow
